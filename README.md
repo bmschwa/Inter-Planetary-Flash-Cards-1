@@ -67,3 +67,6 @@ The initial loading and login are quite slow (often 40 seconds each) right now. 
 
 Found Bugs? Create an issue on the issue tracker, or post it in the [support group](https://t.me/joinchat/HFuUg0iRw-CrD5QbOByfSQ)
 
+### Deploy Notes
+
+Currently based on [this](https://paweljw.github.io/2018/04/vue.js-front-end-app-part-6-deploying-to-s3/)
