@@ -1,6 +1,9 @@
 import Vue from 'vue';
-import router from './router';
+import VueRouter from 'vue-router';
 import store from './store';
+
+import Amplify, * as AmplifyModules from 'aws-amplify';
+import { AmplifyPlugin } from 'aws-amplify-vue';
 
 import './assets/_custom.scss';
 
@@ -43,13 +46,21 @@ import AlertFailedSync from './components/AlertFailedSync.vue';
 import AlertBrowserRec from './components/AlertBrowserRec.vue';
 
 import App from './App.vue';
+import router from './router';
+import config from './aws-exports';
+
 import './registerServiceWorker';
+
+Amplify.configure(config);
 
 Vue.use(VueDOMPurifyHTML);
 Vue.use(Vue2TouchEvents);
 Vue.use(LayoutPlugin);
-Vue.component('b-button', BButton);
 Vue.use(Highlight);
+Vue.use(VueRouter, AmplifyPlugin, AmplifyModules);
+
+Vue.config.productionTip = false;
+Vue.component('b-button', BButton);
 
 library.add(
   faMinusCircle,

@@ -70,3 +70,7 @@ Found Bugs? Create an issue on the issue tracker, or post it in the [support gro
 ### Deploy Notes
 
 Currently based on [this](https://paweljw.github.io/2018/04/vue.js-front-end-app-part-6-deploying-to-s3/)
+
+
+#### Credits;
+https://dev.to/dabit3/how-to-build-production-ready-vue-authentication-23mk
