@@ -2,8 +2,13 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import store from '../store';
 
+import Home from '../components/Home';
+import Profile from '../components/Profile';
+import Auth from '../components/Auth';
+import Protected from '../components/Protected';
+
 const Login = () => import('../views/Login.vue');
-const Home = () => import('../views/Home.vue');
+//  const Home = () => import('../views/Home.vue');
 const DeckSelection = () => import('../views/DeckSelection.vue');
 const DeckEditor = () => import('../views/DeckEditor.vue');
 const Settings = () => import('../views/Settings.vue');
@@ -32,15 +37,20 @@ function redirectIfNoUserCollection(to, from, next) {
   }
 }
 
-export default new Router({
-  mode: 'history',
-  routes: [
-    {
-      path: '/index.html',
-      redirect: {
-        name: 'home',
-      },
+const router = new Router({
+    mode: 'history',
+    routes: [
+	{
+          path: '/index.html',
+          component: Home,
     },
+      { path: '/auth',
+        component: Auth },
+      { path: '/protected',
+        component: Protected,
+        meta: {
+            requiresAuth: true} },
+      { path: '/profile', component: Profile, meta: { requiresAuth: true} },
     {
       path: '/',
       redirect: {
@@ -84,3 +94,22 @@ export default new Router({
     },
   ],
 });
+
+router.beforeResolve((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        let user;
+        Vue.prototype.$Amplify.Auth.currentAuthenticatedUser().then(data => {
+            if (data && data.signInUserSession) {
+                user = data;
+            }
+            next()
+        }).catch((e) => {
+            next({
+                path: '/auth'
+            });
+        });
+    }
+    next()
+});
+
+export default router;

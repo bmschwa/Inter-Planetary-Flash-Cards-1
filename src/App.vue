@@ -40,6 +40,8 @@
 
 <script>
 import Navbar from './components/Navbar';
+import { AmplifyEventBus } from 'aws-amplify-vue';
+import { Auth } from 'aws-amplify';
 import { mapGetters, mapState } from 'vuex';
 const debounce = require('lodash/debounce');
 
@@ -50,6 +52,7 @@ export default {
   },
   data() {
     return {
+      signedIn: false,
       newCardClicked: 0,
       newCardCommit: 0,
       toCardEditorFromReview: false,
@@ -60,6 +63,24 @@ export default {
       chromeInstallPrompt: false,
       alertBrowserRec: false,
     };
+  },
+  beforeCreate() {
+    AmplifyEventBus.$on('authState', info => {
+      if (info === 'signedIn') {
+        this.signedIn = true;
+        this.$router.push('/profile');
+      }
+      if (info === 'signedOut') {
+        this.$router.push('/auth');
+        this.signedIn = false;
+      }
+    });
+
+    Auth.currentAuthenticatedUser()
+      .then(user => {
+        this.signedIn = true;
+      })
+      .catch(() => (this.signedIn = false));
   },
   computed: {
     ...mapGetters(['decksMeta', 'currentDeck']),
