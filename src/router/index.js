@@ -7,7 +7,7 @@ import Profile from '../components/Profile';
 import Auth from '../components/Auth';
 import Protected from '../components/Protected';
 
-const Login = () => import('../views/Login.vue');
+// const Login = () => import('../views/Login.vue');
 //  const Home = () => import('../views/Home.vue');
 const DeckSelection = () => import('../views/DeckSelection.vue');
 const DeckEditor = () => import('../views/DeckEditor.vue');
@@ -38,19 +38,24 @@ function redirectIfNoUserCollection(to, from, next) {
 }
 
 const router = new Router({
-    mode: 'history',
-    routes: [
-	{
-          path: '/index.html',
-          component: Home,
+  mode: 'history',
+  routes: [
+    {
+      path: '/index.html',
+      component: Home,
     },
-      { path: '/auth',
-        component: Auth },
-      { path: '/protected',
-        component: Protected,
-        meta: {
-            requiresAuth: true} },
-      { path: '/profile', component: Profile, meta: { requiresAuth: true} },
+    {
+      path: '/auth',
+      component: Auth,
+    },
+    {
+      path: '/protected',
+      component: Protected,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+      { path: '/profile', component: Profile, meta: { requiresAuth: true,} },
     {
       path: '/',
       redirect: {
@@ -60,7 +65,7 @@ const router = new Router({
     {
       path: '/login',
       name: 'login',
-      component: Login,
+      component: Auth,
       beforeEnter: redirectIfNoUserCollection,
     },
     {

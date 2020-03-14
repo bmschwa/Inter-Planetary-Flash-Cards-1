@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div class="auth">
+      <amplify-authenticator></amplify-authenticator>
+    </div>
+
     <div id="login-body">
       <b-alert
         :show="dismissCountDown"
@@ -366,5 +370,9 @@ h1 {
 }
 label {
   margin-top: 5px;
+}
+.auth {
+  margin: 0 auto;
+  width: 460px;
 }
 </style>

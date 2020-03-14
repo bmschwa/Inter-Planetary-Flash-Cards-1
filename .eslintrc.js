@@ -8,8 +8,8 @@ module.exports = {
     'plugin:vue/recommended',
     'standard',
     'eslint:recommended',
-    'plugin:prettier/recommended',
-    'prettier/vue',
+ //   'plugin:prettier/recommended',
+ //   'prettier/vue',
   ],
   // required to lint *.vue files
   plugins: ['vue'],
