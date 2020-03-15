@@ -1,27 +1,27 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import VuexPersistence from 'vuex-persist';
-import Cookies from 'js-cookie';
-import { sortBy } from 'lodash/core';
-const uuidv4 = require('uuid/v4');
+import Vue from 'vue'
+import Vuex from 'vuex'
+import VuexPersistence from 'vuex-persist'
+import Cookies from 'js-cookie'
+import { sortBy } from 'lodash/core'
+const uuidv4 = require('uuid/v4')
 // web workers in Vuex: https://logaretm.com/blog/2019-12-21-vuex-off-mainthread/
 const syncWorker = new Worker('../utils/syncWorker.js', {
-  type: 'module',
-});
+  type: 'module'
+})
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 const vuexCookie = new VuexPersistence({
   restoreState: key => Cookies.getJSON(key),
   saveState: (key, state) =>
     Cookies.set(key, state, {
-      expires: 3,
+      expires: 3
     }),
   reducer: state => ({
     jwt: state.jwt,
-    pinataKeys: state.pinataKeys,
-  }),
-});
+    pinataKeys: state.pinataKeys
+  })
+})
 
 const vuexLocal = new VuexPersistence({
   key: 'vuex', // The key to store the state on in the storage provider.
@@ -31,11 +31,11 @@ const vuexLocal = new VuexPersistence({
     user_collection: state.user_collection,
     decks: state.decks,
     currentDeckId: state.deck,
-    lastSyncsData: state.lastSyncsData,
-  }),
+    lastSyncsData: state.lastSyncsData
+  })
   // Function that passes a mutation and lets you decide if it should update the state in localStorage.
   // filter: mutation => (true)
-});
+})
 
 const store = new Vuex.Store({
   state: {
@@ -52,190 +52,190 @@ const store = new Vuex.Store({
     syncFailed: false,
     initialSync: 0,
     online: false,
-    serverURL: 'https://ipfc-midware.herokuapp.com',
+    serverURL: 'https://ipfc-midware.herokuapp.com'
   },
   mutations: {
-    updateJwt(state, newJwt) {
-      state.jwt = newJwt;
+    updateJwt (state, newJwt) {
+      state.jwt = newJwt
     },
-    deleteJwt(state) {
-      state.jwt = null;
+    deleteJwt (state) {
+      state.jwt = null
     },
-    toggleJwtValid(state, bool) {
-      state.jwtValid = bool;
+    toggleJwtValid (state, bool) {
+      state.jwtValid = bool
     },
-    updatePinataKeys(state, data) {
-      state.pinataKeys = data;
+    updatePinataKeys (state, data) {
+      state.pinataKeys = data
     },
-    toggleSyncing(state, bool) {
-      state.syncing = bool;
+    toggleSyncing (state, bool) {
+      state.syncing = bool
     },
-    updateInitialSync(state, num) {
-      state.initialSync = num;
+    updateInitialSync (state, num) {
+      state.initialSync = num
     },
-    updateOnline(state, bool) {
-      state.online = bool;
+    updateOnline (state, bool) {
+      state.online = bool
     },
-    updateUserCollection(state, data) {
-      state.user_collection = data;
+    updateUserCollection (state, data) {
+      state.user_collection = data
     },
-    updateSettings(state, data) {
-      state.user_collection.webapp_settings = data;
+    updateSettings (state, data) {
+      state.user_collection.webapp_settings = data
     },
-    updateSetting(state, data) {
-      const settingSection = data.settingSection;
-      const settingName = data.settingName;
-      const settingData = data.setting;
-      state.user_collection.webapp_settings[settingSection][settingName] = settingData;
-      state.user_collection.webapp_settings.edited = new Date().getTime();
+    updateSetting (state, data) {
+      const settingSection = data.settingSection
+      const settingName = data.settingName
+      const settingData = data.setting
+      state.user_collection.webapp_settings[settingSection][settingName] = settingData
+      state.user_collection.webapp_settings.edited = new Date().getTime()
     },
-    updateSettingSection(state, data) {
-      const settingSection = data.settingSection;
-      const settingsData = data.settings;
-      state.user_collection.webapp_settings[settingSection] = settingsData;
-      state.user_collection.webapp_settings.edited = new Date().getTime();
+    updateSettingSection (state, data) {
+      const settingSection = data.settingSection
+      const settingsData = data.settings
+      state.user_collection.webapp_settings[settingSection] = settingsData
+      state.user_collection.webapp_settings.edited = new Date().getTime()
     },
-    addDeck(state, newDeck) {
-      state.decks.unshift(newDeck);
-      state.user_collection.deck_ids.push(newDeck.deck_id);
+    addDeck (state, newDeck) {
+      state.decks.unshift(newDeck)
+      state.user_collection.deck_ids.push(newDeck.deck_id)
     },
-    updateDeck(state, data) {
-      const newerDeck = data.deck;
-      const oldDeckLst = state.decks.filter(function(deckToCheck) {
-        return deckToCheck.deck_id === newerDeck.deck_id;
-      });
+    updateDeck (state, data) {
+      const newerDeck = data.deck
+      const oldDeckLst = state.decks.filter(function (deckToCheck) {
+        return deckToCheck.deck_id === newerDeck.deck_id
+      })
       if (oldDeckLst.length > 0) {
-        const oldDeck = oldDeckLst[0];
-        const oldDeckIndex = state.decks.indexOf(oldDeck);
+        const oldDeck = oldDeckLst[0]
+        const oldDeckIndex = state.decks.indexOf(oldDeck)
         if (!data.fromSync) {
-          newerDeck.edited = new Date().getTime(); // this screws up sync if updated
+          newerDeck.edited = new Date().getTime() // this screws up sync if updated
         }
-        state.decks.splice(oldDeckIndex, 1);
-        state.decks.push(newerDeck);
+        state.decks.splice(oldDeckIndex, 1)
+        state.decks.push(newerDeck)
       }
     },
-    updateDecks(state, data) {
-      state.decks = data;
+    updateDecks (state, data) {
+      state.decks = data
     },
-    deleteDeck(state, deckId) {
+    deleteDeck (state, deckId) {
       // add to user_collection deleted list
-      state.user_collection.deleted_deck_ids.push(deckId);
+      state.user_collection.deleted_deck_ids.push(deckId)
       // remove from user_collection included list
-      const deckIdIndex = state.user_collection.deck_ids.indexOf(deckId);
-      state.user_collection.deck_ids.splice(deckIdIndex, 1);
+      const deckIdIndex = state.user_collection.deck_ids.indexOf(deckId)
+      state.user_collection.deck_ids.splice(deckIdIndex, 1)
 
       // remove the deck from 'decks'
-      let deckIndex;
+      let deckIndex
       for (const deck of state.decks) {
         if (deck.deck_id === deckId) {
-          deckIndex = state.decks.indexOf(deck);
-          break;
+          deckIndex = state.decks.indexOf(deck)
+          break
         }
       }
       if (deckIndex !== -1) {
         // just in case its alraady not there
-        state.decks.splice(deckIndex, 1);
+        state.decks.splice(deckIndex, 1)
       }
     },
-    newCard(state, data) {
+    newCard (state, data) {
       // new blank card
-      const newCard = data.newCard;
-      const deckId = data.deck_id;
+      const newCard = data.newCard
+      const deckId = data.deck_id
       for (const deck of state.decks) {
         if (deck.deck_id === deckId) {
-          deck.cards.push(newCard);
-          deck.edited = new Date().getTime();
-          break;
+          deck.cards.push(newCard)
+          deck.edited = new Date().getTime()
+          break
         }
       }
     },
-    addCard(state, data) {
+    addCard (state, data) {
       // insert card with data
-      const deckId = data.deck_id;
-      const card = data.card;
+      const deckId = data.deck_id
+      const card = data.card
       for (const deck of state.decks) {
         if (deck.deck_id === deckId) {
-          let sameCount = 0;
+          let sameCount = 0
           for (const origCard of deck.cards) {
             if (origCard.card_id === card.card_id) {
-              sameCount++;
-              break;
+              sameCount++
+              break
             }
           }
           if (sameCount === 0) {
-            deck.cards.push(card);
-            deck.edited = new Date().getTime();
+            deck.cards.push(card)
+            deck.edited = new Date().getTime()
           }
-          break;
+          break
         }
       }
     },
-    deleteCard(state, data) {
-      const deckId = data.deck_id;
-      const cardId = data.card_id;
-      let cardIndex;
+    deleteCard (state, data) {
+      const deckId = data.deck_id
+      const cardId = data.card_id
+      let cardIndex
       for (const deck of state.decks) {
         if (deck.deck_id === deckId) {
           for (const card of deck.cards) {
             if (card.card_id === cardId) {
-              cardIndex = deck.cards.indexOf(card);
+              cardIndex = deck.cards.indexOf(card)
               if (cardIndex !== -1) {
                 // just in case its alraady not there
-                deck.cards.splice(cardIndex, 1);
-                deck.edited = new Date().getTime();
-                break;
+                deck.cards.splice(cardIndex, 1)
+                deck.edited = new Date().getTime()
+                break
               }
             }
           }
-          break;
+          break
         }
       }
     },
-    updateCard(state, data) {
-      const deckId = data.deck_id;
-      const newCard = JSON.parse(JSON.stringify(data.card));
-      let cardIndex;
+    updateCard (state, data) {
+      const deckId = data.deck_id
+      const newCard = JSON.parse(JSON.stringify(data.card))
+      let cardIndex
       for (const deck of state.decks) {
         if (deck.deck_id === deckId) {
           for (const oldCard of deck.cards) {
             if (oldCard.card_id === newCard.card_id) {
-              cardIndex = deck.cards.indexOf(oldCard);
+              cardIndex = deck.cards.indexOf(oldCard)
               if (cardIndex !== -1) {
                 // just in case its not there
-                deck.cards.splice(cardIndex, 1, newCard);
-                deck.edited = new Date().getTime();
-                break;
+                deck.cards.splice(cardIndex, 1, newCard)
+                deck.edited = new Date().getTime()
+                break
               }
             }
           }
-          break;
+          break
         }
       }
     },
-    updateCurrentDeckId(state, data) {
-      state.currentDeckId = data;
+    updateCurrentDeckId (state, data) {
+      state.currentDeckId = data
     },
-    updateProgressCounter(state, data) {
-      state.navProgressCounter = data;
+    updateProgressCounter (state, data) {
+      state.navProgressCounter = data
     },
-    updateCardToEditIndex(state, index) {
-      state.cardToEditIndex = index;
+    updateCardToEditIndex (state, index) {
+      state.cardToEditIndex = index
     },
-    updateLastSyncsData(state, data) {
-      state.lastSyncsData = data;
+    updateLastSyncsData (state, data) {
+      state.lastSyncsData = data
     },
-    toggleSyncFailed(state, bool) {
-      state.syncFailed = bool;
+    toggleSyncFailed (state, bool) {
+      state.syncFailed = bool
     },
-    updateSchedule(state, data) {
-      state.user_collection.schedule = data;
+    updateSchedule (state, data) {
+      state.user_collection.schedule = data
     },
-    addCardToSchedule(state, cardId) {
-      let dupCount = 0;
+    addCardToSchedule (state, cardId) {
+      let dupCount = 0
       for (const scheduleItem of state.user_collection.schedule.list) {
         if (scheduleItem.card_id === cardId) {
-          dupCount++;
-          break;
+          dupCount++
+          break
         }
       }
       if (dupCount === 0) {
@@ -243,118 +243,118 @@ const store = new Vuex.Store({
           card_id: cardId,
           level: 0,
           due: new Date().getTime(),
-          last_interval: null,
-        });
-        state.user_collection.schedule.edited = new Date().getTime();
+          last_interval: null
+        })
+        state.user_collection.schedule.edited = new Date().getTime()
       }
     },
-    updateCardSchedule(state, data) {
-      const cardId = data.card_id;
-      const newLevel = data.level;
-      const newDue = data.due;
-      const newLastInterval = data.last_interval;
+    updateCardSchedule (state, data) {
+      const cardId = data.card_id
+      const newLevel = data.level
+      const newDue = data.due
+      const newLastInterval = data.last_interval
       for (const scheduleItem of state.user_collection.schedule.list) {
         if (scheduleItem.card_id === cardId) {
-          scheduleItem.level = newLevel;
-          scheduleItem.due = newDue;
-          scheduleItem.last_interval = newLastInterval;
-          state.user_collection.schedule.edited = new Date().getTime();
-          break;
+          scheduleItem.level = newLevel
+          scheduleItem.due = newDue
+          scheduleItem.last_interval = newLastInterval
+          state.user_collection.schedule.edited = new Date().getTime()
+          break
         }
       }
     },
-    resetCardSchedule(state, cardId) {
-      const newLevel = 0;
-      const newDue = new Date().getTime();
+    resetCardSchedule (state, cardId) {
+      const newLevel = 0
+      const newDue = new Date().getTime()
       for (const scheduleItem of state.user_collection.schedule.list) {
         if (scheduleItem.card_id === cardId) {
-          scheduleItem.level = newLevel;
-          scheduleItem.due = newDue;
-          scheduleItem.last_interval = null;
-          state.user_collection.schedule.edited = new Date().getTime();
-          break;
+          scheduleItem.level = newLevel
+          scheduleItem.due = newDue
+          scheduleItem.last_interval = null
+          state.user_collection.schedule.edited = new Date().getTime()
+          break
         }
       }
     },
-    deleteCardFromSchedule(state, cardId) {
-      const schedule = state.user_collection.schedule.list;
+    deleteCardFromSchedule (state, cardId) {
+      const schedule = state.user_collection.schedule.list
       for (const scheduleItem of schedule) {
-        if (scheduleItem.card_id === cardId) schedule.splice(schedule.indexOf(scheduleItem), 1);
-        schedule.edited = new Date().getTime();
-        break;
+        if (scheduleItem.card_id === cardId) schedule.splice(schedule.indexOf(scheduleItem), 1)
+        schedule.edited = new Date().getTime()
+        break
       }
-    },
+    }
   },
   actions: {
-    newCard(context, deckId) {
+    newCard (context, deckId) {
       const newCard = {
         card_id: uuidv4(),
         card_tags: ['Daily Review'],
         front_text: '',
         back_text: '',
         front_rich_text: '',
-        back_rich_text: '',
-      };
+        back_rich_text: ''
+      }
       const data = {
         newCard: newCard,
-        deck_id: deckId,
-      };
-      context.commit('newCard', data);
-      context.commit('addCardToSchedule', newCard.card_id);
+        deck_id: deckId
+      }
+      context.commit('newCard', data)
+      context.commit('addCardToSchedule', newCard.card_id)
     },
-    updateCard(context, data) {
-      context.commit('updateCard', data);
+    updateCard (context, data) {
+      context.commit('updateCard', data)
     },
-    navProgress(context, data) {
-      const outputString = data.completed + ' / ' + data.totalCards;
-      context.commit('updateProgressCounter', outputString);
+    navProgress (context, data) {
+      const outputString = data.completed + ' / ' + data.totalCards
+      context.commit('updateProgressCounter', outputString)
     },
-    logout(context) {
-      context.commit('deleteJwt');
-      context.commit('toggleJwtValid', false);
+    logout (context) {
+      context.commit('deleteJwt')
+      context.commit('toggleJwtValid', false)
     },
-    checkJwt(context) {
-      const jwt = context.state.jwt;
+    checkJwt (context) {
+      const jwt = context.state.jwt
       if (jwt === null) {
-        context.commit('toggleJwtValid', false);
+        context.commit('toggleJwtValid', false)
       } else if (!jwt || jwt.split('.').length < 3) {
-        context.commit('toggleJwtValid', false);
+        context.commit('toggleJwtValid', false)
       } else {
-        const data = JSON.parse(atob(jwt.split('.')[1]));
-        const exp = new Date(data.exp * 1000); // JS deals with dates in milliseconds since epoch, python in seconds
-        const now = new Date();
-        context.commit('toggleJwtValid', now < exp);
+        const data = JSON.parse(atob(jwt.split('.')[1]))
+        const exp = new Date(data.exp * 1000) // JS deals with dates in milliseconds since epoch, python in seconds
+        const now = new Date()
+        context.commit('toggleJwtValid', now < exp)
       }
     },
-    levelUpCard(context, cardId) {
-      let cardData = null;
+    levelUpCard (context, cardId) {
+      let cardData = null
       for (const scheduleItem of context.state.user_collection.schedule.list) {
         if (scheduleItem.card_id === cardId) {
-          cardData = JSON.parse(JSON.stringify(scheduleItem));
-          break;
+          cardData = JSON.parse(JSON.stringify(scheduleItem))
+          break
         }
       }
-      const newLevel = cardData.level + 1;
-      let newDue = cardData.due;
-      let newLastInterval = cardData.last_interval;
-      const settings = context.state.user_collection.webapp_settings.schedule;
+      const newLevel = cardData.level + 1
+      let newDue = cardData.due
+      let newLastInterval = cardData.last_interval
+      const settings = context.state.user_collection.webapp_settings.schedule
       if (newLevel <= settings.initial_reviews.length) {
-        const max = settings.initial_reviews[newLevel - 1] * 60000 * (1 + settings.randomizer);
-        const min = settings.initial_reviews[newLevel - 1] * 60000 * (1 - settings.randomizer);
-        newDue = new Date().getTime() + Math.random() * (max - min + 1) + min;
+        const max = settings.initial_reviews[newLevel - 1] * 60000 * (1 + settings.randomizer)
+        const min = settings.initial_reviews[newLevel - 1] * 60000 * (1 - settings.randomizer)
+        newDue = new Date().getTime() + Math.random() * (max - min + 1) + min
       } else {
-        let max = 0;
-        let min = 0;
+        let max = 0
+        let min = 0
         if (newLastInterval === null) {
-          newLastInterval = 86400; // 1 day in seconds
-          max = newLastInterval * (1 + settings.randomizer);
-          min = newLastInterval * (1 - settings.randomizer);
+          newLastInterval = 86400 // 1 day in seconds
+          max = newLastInterval * (1 + settings.randomizer)
+          min = newLastInterval * (1 - settings.randomizer)
         } else {
-          newLastInterval *= settings.later_reviews_multiplier;
-          max = newLastInterval * (1 + settings.randomizer);
-          min = newLastInterval * (1 - settings.randomizer);
+          newLastInterval *= settings.later_reviews_multiplier
+          max = newLastInterval * (1 + settings.randomizer)
+          min = newLastInterval * (1 - settings.randomizer)
         }
-        newDue = new Date().getTime() + Math.random() * (max - min + 1) + min;
+        newDue = new Date().getTime() + Math.random() * (max - min + 1) + min
       }
       // console.log('    newLevel',newLevel)
       // console.log('    newDue', newDue -1581330417)
@@ -362,53 +362,53 @@ const store = new Vuex.Store({
         card_id: cardId,
         level: newLevel,
         due: newDue,
-        last_interval: newLastInterval,
-      };
-      context.commit('updateCardSchedule', updateData);
+        last_interval: newLastInterval
+      }
+      context.commit('updateCardSchedule', updateData)
     },
-    levelDownCard(context, cardId) {
-      let cardData = null;
+    levelDownCard (context, cardId) {
+      let cardData = null
       for (const scheduleItem of context.state.user_collection.schedule.list) {
         if (scheduleItem.card_id === cardId) {
-          cardData = JSON.parse(JSON.stringify(scheduleItem));
-          break;
+          cardData = JSON.parse(JSON.stringify(scheduleItem))
+          break
         }
       }
-      let newLevel = cardData.level;
-      let newDue = cardData.due;
-      let lastInterval = cardData.last_interval;
-      const settings = context.state.user_collection.webapp_settings.schedule;
+      let newLevel = cardData.level
+      let newDue = cardData.due
+      let lastInterval = cardData.last_interval
+      const settings = context.state.user_collection.webapp_settings.schedule
 
       if (settings.fail_mode === 'reset') {
-        newLevel = 0;
-        newDue = new Date().getTime();
-        lastInterval = null;
+        newLevel = 0
+        newDue = new Date().getTime()
+        lastInterval = null
       } else {
-        newLevel -= settings.fail_mode;
+        newLevel -= settings.fail_mode
         // this could be more perfected
         for (let i = 0; i < settings.fail_mode; i++) {
-          lastInterval /= settings.later_reviews_multiplier;
-          newDue -= lastInterval;
+          lastInterval /= settings.later_reviews_multiplier
+          newDue -= lastInterval
         }
       }
       const updateData = {
         card_id: cardId,
         level: newLevel,
         due: newDue,
-        last_interval: lastInterval,
-      };
-      context.commit('updateCardSchedule', updateData);
+        last_interval: lastInterval
+      }
+      context.commit('updateCardSchedule', updateData)
     },
-    refreshLastSyncsData(context) {
-      const lastDecks = JSON.parse(JSON.stringify(context.state.decks));
-      const lastUserCollection = JSON.parse(JSON.stringify(context.state.user_collection));
+    refreshLastSyncsData (context) {
+      const lastDecks = JSON.parse(JSON.stringify(context.state.decks))
+      const lastUserCollection = JSON.parse(JSON.stringify(context.state.user_collection))
       const lastSyncsData = {
         decks: lastDecks,
-        user_collection: lastUserCollection,
-      };
-      context.commit('updateLastSyncsData', lastSyncsData);
+        user_collection: lastUserCollection
+      }
+      context.commit('updateLastSyncsData', lastSyncsData)
     },
-    async cloudSync(context, skipSameCheck = false) {
+    async cloudSync (context, skipSameCheck = false) {
       const data = {
         decks: context.state.decks,
         user_collection: context.state.user_collection,
@@ -419,15 +419,15 @@ const store = new Vuex.Store({
         serverURL: context.state.serverURL,
         jwt: context.state.jwt,
         decksMeta: JSON.parse(JSON.stringify(context.getters.decksMeta)),
-        skipSameCheck: skipSameCheck,
-      };
-      syncWorker.postMessage(data);
-    },
+        skipSameCheck: skipSameCheck
+      }
+      syncWorker.postMessage(data)
+    }
   },
   getters: {
-    decksMeta(state) {
-      const decks = state.decks;
-      const newDecksMeta = [];
+    decksMeta (state) {
+      const decks = state.decks
+      const newDecksMeta = []
       for (const deck of decks) {
         const deckMeta = {
           deck_cid: deck.deck_cid,
@@ -435,22 +435,22 @@ const store = new Vuex.Store({
           edited: deck.edited,
           title: deck.title,
           deck_length: deck.cards.length,
-          icon_color: deck.icon_color,
-        };
-        newDecksMeta.push(deckMeta);
+          icon_color: deck.icon_color
+        }
+        newDecksMeta.push(deckMeta)
       }
-      newDecksMeta.sort(function(a, b) {
-        return b.edited - a.edited;
-      });
-      return newDecksMeta;
+      newDecksMeta.sort(function (a, b) {
+        return b.edited - a.edited
+      })
+      return newDecksMeta
     },
-    currentDeck(state, getters) {
+    currentDeck (state, getters) {
       if (state.currentDeckId === 'reviewDeck') {
-        return getters.reviewDeck;
+        return getters.reviewDeck
       } else {
         for (const deck of state.decks) {
           if (deck.deck_id === state.currentDeckId) {
-            return deck;
+            return deck
           }
         }
       }
@@ -459,7 +459,7 @@ const store = new Vuex.Store({
     isAuthenticated: state => state.jwtValid,
     getDecks: state => state.decks,
     navProgressCounter: state => state.navProgressCounter,
-    reviewDeck(state) {
+    reviewDeck (state) {
       if (
         state.user_collection === null ||
         state.decks === null ||
@@ -469,32 +469,32 @@ const store = new Vuex.Store({
         return {
           cards: [],
           allTags: [],
-          title: 'Review Deck',
-        };
+          title: 'Review Deck'
+        }
       } else {
-        const decks = state.decks;
+        const decks = state.decks
         const reviewDeck = {
           cards: [],
           allTags: [],
-          title: 'Review Deck',
-        };
+          title: 'Review Deck'
+        }
         // since we are running through the whole collection anyway, let all tags come for the ride
         for (const deck of decks) {
           for (const card of deck.cards) {
             for (const tag of card.card_tags) {
               if (!reviewDeck.allTags.includes(tag)) {
-                reviewDeck.allTags.push(tag);
+                reviewDeck.allTags.push(tag)
               }
             }
             if (card.card_tags.includes('Daily Review') && !reviewDeck.cards.includes(card)) {
-              reviewDeck.cards.push(card);
+              reviewDeck.cards.push(card)
             }
           }
         }
-        return reviewDeck;
+        return reviewDeck
       }
     },
-    todaysDeck(state, getters) {
+    todaysDeck (state, getters) {
       if (
         state.user_collection === null ||
         state.decks === null ||
@@ -504,27 +504,27 @@ const store = new Vuex.Store({
         return {
           cards: [],
           allTags: [],
-          title: 'Review Deck',
-        };
+          title: 'Review Deck'
+        }
       } else {
-        const schedule = state.user_collection.schedule.list;
-        const reviewDeck = getters.reviewDeck;
+        const schedule = state.user_collection.schedule.list
+        const reviewDeck = getters.reviewDeck
         const todaysDeck = {
           cards: [],
-          title: `Today's Review`,
-        };
-        const now = new Date().getTime();
-        const cutOff = now + 3600 * 23; // cards due within 23 hours
+          title: 'Today\'s Review'
+        }
+        const now = new Date().getTime()
+        const cutOff = now + 3600 * 23 // cards due within 23 hours
         // console.log('cutoff', cutOff-1581318652)
-        const todaysScheduleItems = [];
+        const todaysScheduleItems = []
         for (const scheduleItem of schedule) {
           // console.log('scheduleItem.due', scheduleItem.due-1581318652)
 
           if (scheduleItem.due <= cutOff) {
-            todaysScheduleItems.push(scheduleItem);
+            todaysScheduleItems.push(scheduleItem)
           }
         }
-        const todaysScheduleItemsSorted = sortBy(todaysScheduleItems, 'due');
+        const todaysScheduleItemsSorted = sortBy(todaysScheduleItems, 'due')
         // console.log('todaysScheduleItemsSorted', todaysScheduleItemsSorted)
 
         // need to figure out how to limit the list to 50 cards, but if its a getter, it will auto reset...
@@ -532,21 +532,21 @@ const store = new Vuex.Store({
           // this could get expensive later
           for (const card of reviewDeck.cards) {
             if (card.card_id === scheduleItem.card_id) {
-              todaysDeck.cards.push(card);
-              break;
+              todaysDeck.cards.push(card)
+              break
             }
           }
         }
-        return todaysDeck;
+        return todaysDeck
       }
-    },
+    }
   },
-  plugins: [vuexCookie.plugin, vuexLocal.plugin],
-});
+  plugins: [vuexCookie.plugin, vuexLocal.plugin]
+})
 
 syncWorker.onmessage = e => {
   // could add an if and a type option here to dispatch other actions
-  store.commit(e.data.mutation, e.data.payload);
-};
+  store.commit(e.data.mutation, e.data.payload)
+}
 
-export default store;
+export default store

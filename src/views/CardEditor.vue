@@ -1,12 +1,22 @@
 <template>
-  <b-container fluid class="body scroller" @keydown.ctrl.delete.prevent="deleteCard">
+  <b-container
+    fluid
+    class="body scroller"
+    @keydown.ctrl.delete.prevent="deleteCard"
+  >
     <alert-failed-sync />
     <alert-offline />
     <alert-update-pwa @updatePWA="PWAUpdate(bool)" />
     <alert-browser-rec :alert-browser-rec="alertBrowserRec" />
     <b-row id="main-row">
-      <b-col id="main-col" :class="swipeTransition">
-        <b-container class="card scroller" :class="frontFocusClass">
+      <b-col
+        id="main-col"
+        :class="swipeTransition"
+      >
+        <b-container
+          class="card scroller"
+          :class="frontFocusClass"
+        >
           <div
             v-if="!frontFocused"
             v-touch:swipe="swipeHandler"
@@ -14,7 +24,7 @@
             v-dompurify-html="card.front_rich_text"
             class="preview"
             @click="focusInputFront()"
-          ></div>
+          />
           <quill-editor
             v-if="frontFocused"
             ref="myQuillEditorFront"
@@ -22,10 +32,13 @@
             v-highlight
             class="quill"
             :options="editorOption"
-          ></quill-editor>
+          />
         </b-container>
-        <br />
-        <b-container class="card scroller" :class="backFocusClass">
+        <br>
+        <b-container
+          class="card scroller"
+          :class="backFocusClass"
+        >
           <div
             v-if="!backFocused"
             v-touch:swipe="swipeHandler"
@@ -33,7 +46,7 @@
             v-dompurify-html="card.back_rich_text"
             class="preview"
             @click="focusInputBack()"
-          ></div>
+          />
           <quill-editor
             v-if="backFocused"
             ref="myQuillEditorBack"
@@ -41,11 +54,20 @@
             v-highlight
             class="quill"
             :options="editorOption"
-          ></quill-editor>
+          />
         </b-container>
-        <p id="counter" v-touch:swipe="swipeHandler">{{ cardNumberOutOfDeck }}</p>
-        <br v-touch:swipe="swipeHandler" />
-        <b-container id="tags-bottom" v-touch:swipe="swipeHandler" class="tag-chooser">
+        <p
+          id="counter"
+          v-touch:swipe="swipeHandler"
+        >
+          {{ cardNumberOutOfDeck }}
+        </p>
+        <br v-touch:swipe="swipeHandler">
+        <b-container
+          id="tags-bottom"
+          v-touch:swipe="swipeHandler"
+          class="tag-chooser"
+        >
           <p class="d-inline tags-label">
             Tags:
             <b-button class="add-btn">
@@ -70,7 +92,7 @@
                 v-model="newTagTitle"
                 class="d-inline tag-input"
                 @keyup.enter.prevent="addNewTag()"
-              ></b-form-input>
+              />
             </b-button>
           </p>
           <b-button
@@ -78,16 +100,18 @@
             :key="tag"
             class="tag-style-button green-btn d-inline"
             @click="removeTagFromCard(tag)"
-            >{{ tag }}</b-button
           >
-          <br />
+            {{ tag }}
+          </b-button>
+          <br>
           <b-button
             v-for="tag in unincludedTags"
             :key="tag"
             class="tag-style-button white-btn d-inline"
             @click="addTagToCard(tag)"
-            >{{ tag }}</b-button
           >
+            {{ tag }}
+          </b-button>
         </b-container>
       </b-col>
     </b-row>
@@ -96,8 +120,14 @@
         <b-container id="buttons-inner">
           <b-row>
             <b-col class="btn-col">
-              <b-button class="btn-circle btn-md" @click="deleteCard()">
-                <font-awesome-icon size="2x" icon="trash-alt" />
+              <b-button
+                class="btn-circle btn-md"
+                @click="deleteCard()"
+              >
+                <font-awesome-icon
+                  size="2x"
+                  icon="trash-alt"
+                />
               </b-button>
             </b-col>
             <b-col class="btn-col">
@@ -106,17 +136,33 @@
                 class="btn-circle btn-md"
                 @click="previousCard()"
               >
-                <font-awesome-icon size="2x" icon="step-backward" />
+                <font-awesome-icon
+                  size="2x"
+                  icon="step-backward"
+                />
               </b-button>
             </b-col>
             <b-col class="btn-col">
-              <b-button :disabled="rightNavDisabled" class="btn-circle btn-md" @click="nextCard()">
-                <font-awesome-icon size="2x" icon="step-forward" />
+              <b-button
+                :disabled="rightNavDisabled"
+                class="btn-circle btn-md"
+                @click="nextCard()"
+              >
+                <font-awesome-icon
+                  size="2x"
+                  icon="step-forward"
+                />
               </b-button>
             </b-col>
             <b-col class="btn-col">
-              <b-button class="btn-circle btn-md" @click="doneCheck()">
-                <font-awesome-icon size="2x" icon="check" />
+              <b-button
+                class="btn-circle btn-md"
+                @click="doneCheck()"
+              >
+                <font-awesome-icon
+                  size="2x"
+                  icon="check"
+                />
               </b-button>
             </b-col>
           </b-row>
@@ -129,26 +175,26 @@
 <script>
 /* eslint-disable vue/valid-v-on */
 
-import { BFormInput } from 'bootstrap-vue';
-import { isEqual } from 'lodash/core';
-import { mapState } from 'vuex';
+import { BFormInput } from 'bootstrap-vue'
+import { isEqual } from 'lodash/core'
+import { mapState } from 'vuex'
 
-import { Quill, quillEditor } from 'vue-quill-editor';
-import 'quill/dist/quill.snow.css';
-import imageUpload from 'quill-plugin-image-upload';
-const uuidv4 = require('uuid/v4');
-const axios = require('axios');
-const FormData = require('form-data');
-Quill.register('modules/imageUpload', imageUpload);
+import { Quill, quillEditor } from 'vue-quill-editor'
+import 'quill/dist/quill.snow.css'
+import imageUpload from 'quill-plugin-image-upload'
+const uuidv4 = require('uuid/v4')
+const axios = require('axios')
+const FormData = require('form-data')
+Quill.register('modules/imageUpload', imageUpload)
 var quillKeyBindings = {
   custom: {
     key: 'ENTER',
     shiftKey: true,
-    handler: function() {
-      document.querySelector('#app-main > div.router-view').__vue__.editorShiftEnter();
-    },
-  },
-};
+    handler: function () {
+      document.querySelector('#app-main > div.router-view').__vue__.editorShiftEnter()
+    }
+  }
+}
 
 export default {
   name: 'CardEditor',
@@ -157,9 +203,9 @@ export default {
     newCardClicked: { type: Number, default: 0 },
     comingToCardEditorFromReview: { type: Boolean },
     newCardCommit: { type: Number, default: 0 },
-    alertBrowserRec: { type: Boolean },
+    alertBrowserRec: { type: Boolean }
   },
-  data() {
+  data () {
     return {
       card: '',
       frontFocused: true,
@@ -175,49 +221,49 @@ export default {
         modules: {
           imageUpload: {
             upload: file => {
-              const gateway = 'https://gateway.pinata.cloud/ipfs/';
-              const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
-              const data = new FormData();
-              data.append('file', file);
+              const gateway = 'https://gateway.pinata.cloud/ipfs/'
+              const url = 'https://api.pinata.cloud/pinning/pinFileToIPFS'
+              const data = new FormData()
+              data.append('file', file)
               const metadata = JSON.stringify({
                 name: 'testname',
                 keyvalues: {
-                  exampleKey: 'exampleValue',
-                },
-              });
-              data.append('pinataMetadata', metadata);
+                  exampleKey: 'exampleValue'
+                }
+              })
+              data.append('pinataMetadata', metadata)
               return axios
                 .post(url, data, {
                   maxContentLength: 'Infinity', // this is needed to prevent axios from erroring out with large files
                   headers: {
                     'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
                     pinata_api_key: this.pinataKeys.pinata_api,
-                    pinata_secret_api_key: this.pinataKeys.pinata_key,
-                  },
+                    pinata_secret_api_key: this.pinataKeys.pinata_key
+                  }
                 })
-                .then(function(response) {
-                  return gateway + response.data.IpfsHash;
+                .then(function (response) {
+                  return gateway + response.data.IpfsHash
                 })
-                .catch(function() {
+                .catch(function () {
                   // console.log(error)
-                });
-            },
+                })
+            }
           },
           toolbar: this.$store.state.user_collection.webapp_settings.text_editor.options.toolbar,
           syntax: {
-            highlight: text => window.hljs.highlightAuto(text).value,
+            highlight: text => window.hljs.highlightAuto(text).value
           },
           history: {
             delay: 2000,
             maxStack: 500,
-            userOnly: true,
+            userOnly: true
           },
           keyboard: {
-            bindings: quillKeyBindings,
-          },
-        },
-      },
-    };
+            bindings: quillKeyBindings
+          }
+        }
+      }
+    }
   },
 
   computed: {
@@ -226,295 +272,295 @@ export default {
       cardToEditIndex: 'cardToEditIndex',
       decks: 'decks',
       jwt: 'jwt',
-      pinataKeys: 'pinataKeys',
+      pinataKeys: 'pinataKeys'
     }),
-    currentDeck() {
-      return this.$store.getters.currentDeck;
+    currentDeck () {
+      return this.$store.getters.currentDeck
     },
-    unincludedTags() {
+    unincludedTags () {
       // this now rides on review deck in getters
-      const allTagsList = this.$store.getters.reviewDeck.allTags;
-      const unincludedTagsList = [];
+      const allTagsList = this.$store.getters.reviewDeck.allTags
+      const unincludedTagsList = []
       for (const tag of allTagsList) {
         if (!this.card.card_tags.includes(tag)) {
-          unincludedTagsList.push(tag);
+          unincludedTagsList.push(tag)
         }
       }
-      return unincludedTagsList;
+      return unincludedTagsList
     },
-    leftNavDisabled() {
+    leftNavDisabled () {
       if (this.cardToEditIndex === 0) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
     },
-    rightNavDisabled() {
+    rightNavDisabled () {
       if (this.cardToEditIndex === this.currentDeck.cards.length - 1) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
     },
-    unChanged() {
-      const card = this.card;
-      let result = true;
+    unChanged () {
+      const card = this.card
+      let result = true
       if (card !== null && this.initialDeckState !== null) {
         for (const initialDeckCard of this.initialDeckState.cards) {
           if (card.card_id === initialDeckCard.card_id) {
             if (!isEqual(initialDeckCard, card)) {
-              result = false;
-              break;
+              result = false
+              break
             } else {
-              result = true;
-              break;
+              result = true
+              break
             }
           }
         }
       }
-      return result;
+      return result
     },
-    cardNumberOutOfDeck() {
-      const totalCards = this.currentDeck.cards.length;
-      const currentCardNumber = this.cardToEditIndex + 1;
-      let title = this.currentDeck.title;
+    cardNumberOutOfDeck () {
+      const totalCards = this.currentDeck.cards.length
+      const currentCardNumber = this.cardToEditIndex + 1
+      let title = this.currentDeck.title
       if (this.currentDeck.title === undefined) {
-        title = 'Review Deck';
+        title = 'Review Deck'
       }
-      return `Card ${currentCardNumber}/${totalCards} in: ${title}`;
-    },
+      return `Card ${currentCardNumber}/${totalCards} in: ${title}`
+    }
   },
   watch: {
-    newCardClicked: function() {
-      this.newCardFirst();
+    newCardClicked: function () {
+      this.newCardFirst()
     },
-    newCardCommit: function() {
-      this.newCardThen();
-    },
+    newCardCommit: function () {
+      this.newCardThen()
+    }
   },
-  created() {
-    this.setCard();
-    this.initialDeckState = JSON.parse(JSON.stringify(this.currentDeck));
+  created () {
+    this.setCard()
+    this.initialDeckState = JSON.parse(JSON.stringify(this.currentDeck))
   },
-  mounted() {
-    this.focusInputFront();
-    this.$emit('homeLoad');
+  mounted () {
+    this.focusInputFront()
+    this.$emit('homeLoad')
   },
   methods: {
-    swipeHandler(direction) {
+    swipeHandler (direction) {
       if (direction === 'left' && !this.rightNavDisabled) {
-        this.nextCard();
+        this.nextCard()
       } else if (direction === 'right' && !this.leftNavDisabled) {
-        this.previousCard();
+        this.previousCard()
       }
     },
-    editorShiftEnter() {
-      event.preventDefault();
+    editorShiftEnter () {
+      event.preventDefault()
       if (this.frontFocused) {
-        this.focusInputBack();
+        this.focusInputBack()
       } else {
-        this.doneCheck();
+        this.doneCheck()
       }
     },
-    PWAUpdate(bool) {
-      this.$emit('updatePWA', bool);
+    PWAUpdate (bool) {
+      this.$emit('updatePWA', bool)
     },
-    focusInputFront() {
-      this.frontFocused = true;
-      this.backFocused = false;
-      this.frontFocusClass = 'focused';
-      this.backFocusClass = 'unfocused';
+    focusInputFront () {
+      this.frontFocused = true
+      this.backFocused = false
+      this.frontFocusClass = 'focused'
+      this.backFocusClass = 'unfocused'
       this.$nextTick(() => {
-        const length = this.$refs.myQuillEditorFront.quill.getLength();
-        this.$refs.myQuillEditorFront.quill.setSelection(length);
-      });
+        const length = this.$refs.myQuillEditorFront.quill.getLength()
+        this.$refs.myQuillEditorFront.quill.setSelection(length)
+      })
     },
-    focusInputBack() {
-      this.frontFocused = false;
-      this.backFocused = true;
-      this.frontFocusClass = 'unfocused';
-      this.backFocusClass = 'focused';
+    focusInputBack () {
+      this.frontFocused = false
+      this.backFocused = true
+      this.frontFocusClass = 'unfocused'
+      this.backFocusClass = 'focused'
       this.$nextTick(() => {
-        const length = this.$refs.myQuillEditorBack.quill.getLength();
-        this.$refs.myQuillEditorBack.quill.setSelection(length);
-      });
+        const length = this.$refs.myQuillEditorBack.quill.getLength()
+        this.$refs.myQuillEditorBack.quill.setSelection(length)
+      })
     },
-    setCard() {
-      this.card = JSON.parse(JSON.stringify(this.currentDeck.cards[this.cardToEditIndex]));
+    setCard () {
+      this.card = JSON.parse(JSON.stringify(this.currentDeck.cards[this.cardToEditIndex]))
     },
-    deleteCard: function() {
-      const card = JSON.parse(JSON.stringify(this.card));
-      const deck = JSON.parse(JSON.stringify(this.currentDeck));
-      let wasLastCard;
+    deleteCard: function () {
+      const card = JSON.parse(JSON.stringify(this.card))
+      const deck = JSON.parse(JSON.stringify(this.currentDeck))
+      let wasLastCard
       if (this.rightNavDisabled) {
-        wasLastCard = true;
+        wasLastCard = true
       }
-      let deckId = null;
+      let deckId = null
       if (deck.title === 'Review Deck') {
-        deckId = this.findCardsDeck(card.card_id);
+        deckId = this.findCardsDeck(card.card_id)
       } else {
-        deckId = deck.deck_id;
+        deckId = deck.deck_id
       }
-      const deleteData = { deck_id: deckId, card_id: card.card_id };
+      const deleteData = { deck_id: deckId, card_id: card.card_id }
       if (deck.cards.length === 1 || this.comingToCardEditorFromReview) {
-        this.$router.go(-1);
-        this.$store.commit('deleteCard', deleteData);
-        this.$store.commit('deleteCardFromSchedule', card.card_id);
+        this.$router.go(-1)
+        this.$store.commit('deleteCard', deleteData)
+        this.$store.commit('deleteCardFromSchedule', card.card_id)
       } else {
         if (wasLastCard) {
-          this.$store.commit('updateCardToEditIndex', this.cardToEditIndex - 1);
+          this.$store.commit('updateCardToEditIndex', this.cardToEditIndex - 1)
         }
-        this.$store.commit('deleteCard', deleteData);
-        this.$store.commit('deleteCardFromSchedule', card.card_id);
-        this.setCard();
+        this.$store.commit('deleteCard', deleteData)
+        this.$store.commit('deleteCardFromSchedule', card.card_id)
+        this.setCard()
       }
     },
-    findCardsDeck: function(cardId) {
+    findCardsDeck: function (cardId) {
       for (const deck of this.decks) {
         for (const card of deck.cards) {
           if (card.card_id === cardId) {
-            return deck.deck_id;
+            return deck.deck_id
           }
         }
       }
     },
-    nextCard: function() {
+    nextCard: function () {
       if (!this.rightNavDisabled) {
-        this.swipeTransition = 'throw-left';
-        this.backFocused = true;
-        this.frontFocused = true;
+        this.swipeTransition = 'throw-left'
+        this.backFocused = true
+        this.frontFocused = true
         window.setTimeout(() => {
-          this.nextCardAnimation();
-          this.switchCard(1);
-        }, 120);
+          this.nextCardAnimation()
+          this.switchCard(1)
+        }, 120)
       }
     },
-    previousCard: function() {
+    previousCard: function () {
       if (!this.leftNavDisabled) {
-        this.swipeTransition = 'throw-right';
-        this.backFocused = true;
-        this.frontFocused = true;
+        this.swipeTransition = 'throw-right'
+        this.backFocused = true
+        this.frontFocused = true
         window.setTimeout(() => {
-          this.previousCardAnimation();
-          this.switchCard(-1);
-        }, 120);
+          this.previousCardAnimation()
+          this.switchCard(-1)
+        }, 120)
       }
     },
-    nextCardAnimation() {
-      this.swipeTransition = 'offscreen-right';
+    nextCardAnimation () {
+      this.swipeTransition = 'offscreen-right'
       window.setTimeout(() => {
-        this.swipeTransition = 'enter';
-      }, 1);
+        this.swipeTransition = 'enter'
+      }, 1)
     },
-    previousCardAnimation() {
-      this.swipeTransition = 'offscreen-left';
+    previousCardAnimation () {
+      this.swipeTransition = 'offscreen-left'
       window.setTimeout(() => {
-        this.swipeTransition = 'enter';
-      }, 1);
+        this.swipeTransition = 'enter'
+      }, 1)
     },
-    async switchCard(index) {
-      const unChanged = JSON.parse(JSON.stringify(this.unChanged));
+    async switchCard (index) {
+      const unChanged = JSON.parse(JSON.stringify(this.unChanged))
       if (!unChanged) {
-        await this.submit(this.card);
-        this.$store.commit('updateCardToEditIndex', this.cardToEditIndex + index);
-        this.focusInputFront();
+        await this.submit(this.card)
+        this.$store.commit('updateCardToEditIndex', this.cardToEditIndex + index)
+        this.focusInputFront()
       } else {
-        this.$store.commit('updateCardToEditIndex', this.cardToEditIndex + index);
+        this.$store.commit('updateCardToEditIndex', this.cardToEditIndex + index)
       }
-      this.setCard();
-      this.focusInputFront();
+      this.setCard()
+      this.focusInputFront()
     },
-    doneCheck: function() {
+    doneCheck: function () {
       if (!this.unChanged) {
-        this.submit(this.card);
+        this.submit(this.card)
       }
-      this.$router.go(-1);
+      this.$router.go(-1)
     },
-    getQuillData: function(cardInput, quill) {
+    getQuillData: function (cardInput, quill) {
       // copy image and plaintext
 
-      const card = JSON.parse(JSON.stringify(cardInput));
+      const card = JSON.parse(JSON.stringify(cardInput))
       for (const line of quill.quillFrontDelta.ops) {
         if (line.insert.image) {
-          card.front_image = line.insert.image;
-          break;
+          card.front_image = line.insert.image
+          break
         }
       }
-      card.front_text = quill.frontGottenText;
+      card.front_text = quill.frontGottenText
       for (const line of quill.quillBackDelta.ops) {
         if (line.insert.image) {
-          card.back_image = line.insert.image;
-          break;
+          card.back_image = line.insert.image
+          break
         }
       }
-      card.back_text = quill.backGottenText;
-      return card;
+      card.back_text = quill.backGottenText
+      return card
     },
-    async submit(card) {
+    async submit (card) {
       // this focuses both sides so that quill is showing
-      this.backFocused = true;
-      this.frontFocused = true;
-      await this.$nextTick(() => {});
+      this.backFocused = true
+      this.frontFocused = true
+      await this.$nextTick(() => {})
       const quill = JSON.parse(
         JSON.stringify({
           quillFrontDelta: this.$refs.myQuillEditorFront.quill.getContents(),
           frontGottenText: this.$refs.myQuillEditorFront.quill.getText(),
           quillBackDelta: this.$refs.myQuillEditorBack.quill.getContents(),
-          backGottenText: this.$refs.myQuillEditorBack.quill.getText(),
+          backGottenText: this.$refs.myQuillEditorBack.quill.getText()
         })
-      );
-      this.submitStep2(card, quill);
-      return true;
+      )
+      this.submitStep2(card, quill)
+      return true
     },
-    submitStep2(cardInput, quill) {
-      const card = this.getQuillData(cardInput, quill);
+    submitStep2 (cardInput, quill) {
+      const card = this.getQuillData(cardInput, quill)
       // remove empty card
       if (card.front_text === '' && card.back_text === '') {
-        this.deleteCard();
+        this.deleteCard()
       } else {
-        let deckId = null;
+        let deckId = null
         if (this.currentDeck.title === 'Review Deck') {
-          deckId = this.findCardsDeck(card.card_id);
+          deckId = this.findCardsDeck(card.card_id)
         } else {
-          deckId = this.currentDeck.deck_id;
+          deckId = this.currentDeck.deck_id
         }
-        const updateData = { deck_id: deckId, card: card };
-        this.$store.dispatch('updateCard', updateData);
-        this.focusInputFront();
-        this.setCard();
+        const updateData = { deck_id: deckId, card: card }
+        this.$store.dispatch('updateCard', updateData)
+        this.focusInputFront()
+        this.setCard()
       }
-      return true;
+      return true
     },
     // use later for dropdown menu, copy to other deck
-    addCardToDeck: function(deckId) {
-      const card = JSON.parse(JSON.stringify(this.card));
-      const addData = { deck_id: deckId, card: card };
-      this.$store.commit('addCard', addData);
+    addCardToDeck: function (deckId) {
+      const card = JSON.parse(JSON.stringify(this.card))
+      const addData = { deck_id: deckId, card: card }
+      this.$store.commit('addCard', addData)
     },
-    removeTagFromCard: function(tag) {
-      const card = JSON.parse(JSON.stringify(this.card));
-      card.card_tags.splice(card.card_tags.indexOf(tag), 1);
-      this.submit(card);
+    removeTagFromCard: function (tag) {
+      const card = JSON.parse(JSON.stringify(this.card))
+      card.card_tags.splice(card.card_tags.indexOf(tag), 1)
+      this.submit(card)
     },
-    addTagToCard: function(tag) {
-      const card = JSON.parse(JSON.stringify(this.card));
+    addTagToCard: function (tag) {
+      const card = JSON.parse(JSON.stringify(this.card))
       if (tag === 'Daily Review') {
-        this.$store.commit('addCardToSchedule', card.card_id);
+        this.$store.commit('addCardToSchedule', card.card_id)
       }
-      card.card_tags.unshift(tag);
-      this.submit(card);
+      card.card_tags.unshift(tag)
+      this.submit(card)
     },
-    toggleAddingTag: function() {
-      this.addingTag = !this.addingTag;
+    toggleAddingTag: function () {
+      this.addingTag = !this.addingTag
     },
     // new
-    moveCard: function() {},
-    copyCardToNewDeck: function() {},
-    duplicateCArd: function() {},
+    moveCard: function () {},
+    copyCardToNewDeck: function () {},
+    duplicateCArd: function () {},
     // move this to deck selection page. keep here for option 'creat new deck', when selecting move/add to another deck
-    addNewDeck: function() {
+    addNewDeck: function () {
       if (this.newDeckTitle === '' || this.newDeckTitle === ' ') {
-        this.toggleAddingDeck();
+        this.toggleAddingDeck()
       } else {
         const emptyDeck = {
           cards: [this.card],
@@ -529,47 +575,47 @@ export default {
           term_count: 1,
           title: this.newDeckTitle,
           visibility: 'public',
-          icon_color: this.generateRandomHslaColor(),
-        };
-        this.$store.commit('addDeck', emptyDeck);
-        this.newDeckTitle = '';
+          icon_color: this.generateRandomHslaColor()
+        }
+        this.$store.commit('addDeck', emptyDeck)
+        this.newDeckTitle = ''
       }
     },
-    generateRandomHslaColor: function() {
+    generateRandomHslaColor: function () {
       // round to an interval of 20, 0-360
-      const hue = Math.round((Math.random() * 360) / 20) * 20;
-      const color = `hsla(${hue}, 100%, 50%, 1)`;
-      return color;
+      const hue = Math.round((Math.random() * 360) / 20) * 20
+      const color = `hsla(${hue}, 100%, 50%, 1)`
+      return color
     },
-    addNewTag: function() {
-      const card = JSON.parse(JSON.stringify(this.card));
-      const allTags = this.unincludedTags.concat(card.card_tags);
+    addNewTag: function () {
+      const card = JSON.parse(JSON.stringify(this.card))
+      const allTags = this.unincludedTags.concat(card.card_tags)
       if (
         allTags.includes(this.newTagTitle) ||
         this.newTagTitle === '' ||
         this.newTagTitle === ' '
       ) {
-        this.newTagTitle = '';
-        this.toggleAddingTag();
+        this.newTagTitle = ''
+        this.toggleAddingTag()
       } else {
-        card.card_tags.unshift(this.newTagTitle);
-        this.submit(card);
-        this.newTagTitle = '';
-        this.toggleAddingTag();
+        card.card_tags.unshift(this.newTagTitle)
+        this.submit(card)
+        this.newTagTitle = ''
+        this.toggleAddingTag()
       }
     },
-    newCardFirst() {
+    newCardFirst () {
       if (!this.unChanged) {
-        this.submit(this.card);
+        this.submit(this.card)
       }
     },
-    newCardThen() {
-      this.setCard();
-      this.initialDeckState = JSON.parse(JSON.stringify(this.currentDeck));
-      this.focusInputFront();
-    },
-  },
-};
+    newCardThen () {
+      this.setCard()
+      this.initialDeckState = JSON.parse(JSON.stringify(this.currentDeck))
+      this.focusInputFront()
+    }
+  }
+}
 </script>
 
 <style scoped>

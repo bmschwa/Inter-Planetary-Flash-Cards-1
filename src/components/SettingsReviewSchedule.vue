@@ -1,15 +1,24 @@
 <template>
-  <b-container id="main" fluid>
-    <b-list-group-item button @click="openSettings()">
+  <b-container
+    id="main"
+    fluid
+  >
+    <b-list-group-item
+      button
+      @click="openSettings()"
+    >
       Review Schedule
     </b-list-group-item>
-    <b-list-group v-if="settingsOpen" class="second-layer-settings">
+    <b-list-group
+      v-if="settingsOpen"
+      class="second-layer-settings"
+    >
       <b-form>
         <b-form-group
           id="max-cards"
           label="Maximum number of cards to review in a day"
           label-for="max-cards"
-          description="Note: You might have to review a new card several times the first day. 
+          description="Note: You might have to review a new card several times the first day.
           This sets the number of unique cards to review in a day, not review times."
         >
           <b-form-input
@@ -17,7 +26,7 @@
             v-model="scheduleSettings.max_cards"
             type="number"
             required
-          ></b-form-input>
+          />
         </b-form-group>
         <b-form-group
           id="initial-schedule"
@@ -28,8 +37,15 @@
         >
           <b-container>
             <b-row>
-              <b-button class="btn-circle initial-schedule" @click="deleteInitialReviewStep()">
-                <font-awesome-icon color="white" size="1x" icon="minus-circle"></font-awesome-icon>
+              <b-button
+                class="btn-circle initial-schedule"
+                @click="deleteInitialReviewStep()"
+              >
+                <font-awesome-icon
+                  color="white"
+                  size="1x"
+                  icon="minus-circle"
+                />
               </b-button>
               <b-form-input
                 id="input-1-1"
@@ -37,37 +53,44 @@
                 class="initial-schedule"
                 type="number"
                 required
-              ></b-form-input>
+              />
               <b-form-input
                 v-if="scheduleSettings.initial_reviews.length > 1"
                 id="input-1-2"
                 v-model="scheduleSettings.initial_reviews[1]"
                 class="initial-schedule"
                 type="number"
-              ></b-form-input>
+              />
               <b-form-input
                 v-if="scheduleSettings.initial_reviews.length > 2"
                 id="input-1-3"
                 v-model="scheduleSettings.initial_reviews[2]"
                 class="initial-schedule"
                 type="number"
-              ></b-form-input>
+              />
               <b-form-input
                 v-if="scheduleSettings.initial_reviews.length > 3"
                 id="input-1-4"
                 v-model="scheduleSettings.initial_reviews[3]"
                 class="initial-schedule"
                 type="number"
-              ></b-form-input>
+              />
               <b-form-input
                 v-if="scheduleSettings.initial_reviews.length > 4"
                 id="input-1-5"
                 v-model="scheduleSettings.initial_reviews[4]"
                 class="initial-schedule"
                 type="number"
-              ></b-form-input>
-              <b-button class="btn-circle initial-schedule" @click="addInitialReviewStep()">
-                <font-awesome-icon color="white" size="1x" icon="plus-circle"></font-awesome-icon>
+              />
+              <b-button
+                class="btn-circle initial-schedule"
+                @click="addInitialReviewStep()"
+              >
+                <font-awesome-icon
+                  color="white"
+                  size="1x"
+                  icon="plus-circle"
+                />
               </b-button>
             </b-row>
           </b-container>
@@ -87,8 +110,11 @@
                 min="1"
                 max="3"
                 step="0.05"
-              ></b-form-input>
-              <div class="ml-4" style="font-weight: bold">
+              />
+              <div
+                class="ml-4"
+                style="font-weight: bold"
+              >
                 {{ scheduleSettings.later_reviews_multiplier }}x
               </div>
             </b-row>
@@ -109,8 +135,13 @@
                 min="0"
                 max=".5"
                 step="0.01"
-              ></b-form-input>
-              <div class="ml-4" style="font-weight: bold">{{ randomizerPercentage }}%</div>
+              />
+              <div
+                class="ml-4"
+                style="font-weight: bold"
+              >
+                {{ randomizerPercentage }}%
+              </div>
             </b-row>
           </b-container>
         </b-form-group>
@@ -120,13 +151,43 @@
           label-for="fail-mode"
           description="How many levels should the card be reduced by on an incorrect answer."
         >
-          <b-form-select v-model="selected" @input="failModeSelect(selected)">
-            <b-form-select-option value="reset">Reset card level to 0</b-form-select-option>
-            <b-form-select-option number value="1">Decrease level by 1</b-form-select-option>
-            <b-form-select-option number value="2">Decrease level by 2</b-form-select-option>
-            <b-form-select-option number value="3">Decrease level by 3</b-form-select-option>
-            <b-form-select-option number value="4">Decrease level by 4</b-form-select-option>
-            <b-form-select-option number value="5">Decrease level by 5</b-form-select-option>
+          <b-form-select
+            v-model="selected"
+            @input="failModeSelect(selected)"
+          >
+            <b-form-select-option value="reset">
+              Reset card level to 0
+            </b-form-select-option>
+            <b-form-select-option
+              number
+              value="1"
+            >
+              Decrease level by 1
+            </b-form-select-option>
+            <b-form-select-option
+              number
+              value="2"
+            >
+              Decrease level by 2
+            </b-form-select-option>
+            <b-form-select-option
+              number
+              value="3"
+            >
+              Decrease level by 3
+            </b-form-select-option>
+            <b-form-select-option
+              number
+              value="4"
+            >
+              Decrease level by 4
+            </b-form-select-option>
+            <b-form-select-option
+              number
+              value="5"
+            >
+              Decrease level by 5
+            </b-form-select-option>
           </b-form-select>
         </b-form-group>
         <b-button @click="submit()">
@@ -145,8 +206,8 @@ import {
   BForm,
   BFormSelect,
   BFormSelectOption,
-  BFormGroup,
-} from 'bootstrap-vue';
+  BFormGroup
+} from 'bootstrap-vue'
 
 export default {
   name: 'ReviewScheduleSettings',
@@ -157,9 +218,9 @@ export default {
     BForm,
     BFormSelect,
     BFormSelectOption,
-    BFormGroup,
+    BFormGroup
   },
-  data() {
+  data () {
     return {
       selected: this.$store.state.user_collection.webapp_settings.schedule.fail_mode,
       settingsOpen: false,
@@ -169,46 +230,46 @@ export default {
         later_reviews_multiplier: 2, // how many x
         fail_mode: 'reset', // if set to a number, is how many levels to subtract
         randomizer: 0.1, // percent to randomize
-        max_cards: 50,
-      },
-    };
+        max_cards: 50
+      }
+    }
   },
   computed: {
-    randomizerPercentage() {
-      return Math.round(this.scheduleSettings.randomizer * 100);
-    },
+    randomizerPercentage () {
+      return Math.round(this.scheduleSettings.randomizer * 100)
+    }
   },
   watch: {},
   methods: {
-    openSettings() {
+    openSettings () {
       // this.setMenu()
-      this.settingsOpen = !this.settingsOpen;
+      this.settingsOpen = !this.settingsOpen
     },
-    setMenu() {
-      this.scheduleSettings = this.$store.state.user_collection.webapp_settings.schedule;
+    setMenu () {
+      this.scheduleSettings = this.$store.state.user_collection.webapp_settings.schedule
     },
-    submit() {
+    submit () {
       const submitData = {
         settingSection: 'schedule',
-        settings: this.scheduleSettings,
-      };
-      this.$store.commit('updateSettingSection', submitData);
-    },
-    addInitialReviewStep() {
-      this.scheduleSettings.initial_reviews.push(0);
-    },
-    deleteInitialReviewStep() {
-      this.scheduleSettings.initial_reviews.splice(-1, 1);
-    },
-    failModeSelect(value) {
-      if (value === 'reset') {
-        this.scheduleSettings.fail_mode = value;
-      } else {
-        this.scheduleSettings.fail_mode = parseInt(value);
+        settings: this.scheduleSettings
       }
+      this.$store.commit('updateSettingSection', submitData)
     },
-  },
-};
+    addInitialReviewStep () {
+      this.scheduleSettings.initial_reviews.push(0)
+    },
+    deleteInitialReviewStep () {
+      this.scheduleSettings.initial_reviews.splice(-1, 1)
+    },
+    failModeSelect (value) {
+      if (value === 'reset') {
+        this.scheduleSettings.fail_mode = value
+      } else {
+        this.scheduleSettings.fail_mode = parseInt(value)
+      }
+    }
+  }
+}
 </script>
 
 <style scoped>

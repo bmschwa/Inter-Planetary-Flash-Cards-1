@@ -15,13 +15,13 @@
 
 <script>
 // import { debounce } from 'lodash/core';
-import { BAlert } from 'bootstrap-vue';
-import { mapActions, mapState } from 'vuex';
-const debounce = require('lodash/debounce');
+import { BAlert } from 'bootstrap-vue'
+import { mapActions, mapState } from 'vuex'
+const debounce = require('lodash/debounce')
 // import _ from 'lodash'
 export default {
   components: {
-    BAlert,
+    BAlert
   },
   props: { display: { type: Boolean } },
   data: () => ({
@@ -30,53 +30,53 @@ export default {
     dismissCountDown: 0,
     offlineWarningTxt: `Offline mode: 
         Please cloud sync before using app on another device to avoid data conflicts.
-        Media files might not load.`,
+        Media files might not load.`
   }),
   computed: {
     ...mapActions({
-      cloudSync: 'cloudSync',
+      cloudSync: 'cloudSync'
     }),
-    ...mapState(['initialSync']),
+    ...mapState(['initialSync'])
   },
   watch: {
-    display: function() {
-      this.showAlert();
-    },
+    display: function () {
+      this.showAlert()
+    }
   },
-  mounted() {
-    window.addEventListener('online', this.connectivityChange);
-    window.addEventListener('offline', this.connectivityChange);
-    this.connectivityChange();
+  mounted () {
+    window.addEventListener('online', this.connectivityChange)
+    window.addEventListener('offline', this.connectivityChange)
+    this.connectivityChange()
   },
-  beforeDestroy() {
-    window.removeEventListener('online', this.connectivityChange);
-    window.removeEventListener('offline', this.connectivityChange);
+  beforeDestroy () {
+    window.removeEventListener('online', this.connectivityChange)
+    window.removeEventListener('offline', this.connectivityChange)
   },
   methods: {
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
+    countDownChanged (dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
     },
-    showAlert() {
-      this.dismissCountDown = this.dismissSecs;
+    showAlert () {
+      this.dismissCountDown = this.dismissSecs
     },
-    connectivityChange() {
-      this.online = navigator.onLine;
+    connectivityChange () {
+      this.online = navigator.onLine
       if (this.online !== this.$store.state.online) {
-        this.$store.commit('updateOnline', this.online);
+        this.$store.commit('updateOnline', this.online)
         if (!this.online) {
-          this.showAlert();
+          this.showAlert()
         } else if (this.initialSync > 1) {
           // suppress sync call on app start
           // only want this when coming back online
-          this.debouncedSync();
+          this.debouncedSync()
         }
       }
     },
-    debouncedSync: debounce(function() {
-      this.cloudSync();
-    }, 10000),
-  },
-};
+    debouncedSync: debounce(function () {
+      this.cloudSync()
+    }, 10000)
+  }
+}
 </script>
 
 <style scoped>

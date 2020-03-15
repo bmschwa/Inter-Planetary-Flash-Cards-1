@@ -6,25 +6,47 @@
     <alert-browser-rec :alert-browser-rec="alertBrowserRec" />
     <!-- <h3>Decks</h3> -->
     <b-list-group id="list-group">
-      <b-list-group-item v-for="(deckMeta, index) in decksMeta" id="list-group-item" :key="index">
+      <b-list-group-item
+        v-for="(deckMeta, index) in decksMeta"
+        id="list-group-item"
+        :key="index"
+      >
         <b-container id="list-group-item-container">
           <b-row id="list-group-item-row">
-            <b-col id="icon-col" cols="1" class="align-self-center">
-              <div id="icon" :style="{ backgroundColor: deckMeta.icon_color }">
+            <b-col
+              id="icon-col"
+              cols="1"
+              class="align-self-center"
+            >
+              <div
+                id="icon"
+                :style="{ backgroundColor: deckMeta.icon_color }"
+              >
                 <p id="deck-abrev">
                   <strong>{{ getTitleAbrev(deckMeta.title) }}</strong>
                 </p>
               </div>
             </b-col>
-            <b-col id="text-and-edit-col" cols="11">
+            <b-col
+              id="text-and-edit-col"
+              cols="11"
+            >
               <b-row>
-                <b-col id="text-col" @click="openDeck(decksMeta[index].deck_id)">
-                  <p class="text title">{{ deckMeta.title }}</p>
+                <b-col
+                  id="text-col"
+                  @click="openDeck(decksMeta[index].deck_id)"
+                >
+                  <p class="text title">
+                    {{ deckMeta.title }}
+                  </p>
                   <p class="text card-count">
                     {{ deckMeta.deck_length }} card{{ cardOrCards(deckMeta.deck_length) }}
                   </p>
                 </b-col>
-                <b-col id="edit-col" cols="1">
+                <b-col
+                  id="edit-col"
+                  cols="1"
+                >
                   <b-dropdown
                     id="edit-btn"
                     class="deck-options"
@@ -43,15 +65,22 @@
                       />
                       <span class="sr-only">Search</span>
                     </template>
-                    <b-dropdown-item-button @click="deleteDeck(deckMeta.deck_id)"
-                      >Delete</b-dropdown-item-button
+                    <b-dropdown-item-button
+                      @click="deleteDeck(deckMeta.deck_id)"
                     >
-                    <b-dropdown-item-button disabled href="#">Export</b-dropdown-item-button>
+                      Delete
+                    </b-dropdown-item-button>
+                    <b-dropdown-item-button
+                      disabled
+                      href="#"
+                    >
+                      Export
+                    </b-dropdown-item-button>
                   </b-dropdown>
                 </b-col>
               </b-row>
               <b-row>
-                <div id="underline"></div>
+                <div id="underline" />
               </b-row>
             </b-col>
           </b-row>
@@ -62,61 +91,61 @@
 </template>
 
 <script>
-import { BListGroup, BListGroupItem, BDropdown, BDropdownItemButton } from 'bootstrap-vue';
+import { BListGroup, BListGroupItem, BDropdown, BDropdownItemButton } from 'bootstrap-vue'
 
 export default {
   name: 'DeckSelection',
   components: { BListGroup, BListGroupItem, BDropdown, BDropdownItemButton },
   props: { alertBrowserRec: { type: Boolean } },
-  data() {
-    return {};
+  data () {
+    return {}
   },
   computed: {
-    decksMeta() {
-      return this.$store.getters.decksMeta;
-    },
+    decksMeta () {
+      return this.$store.getters.decksMeta
+    }
   },
-  created() {
-    this.$store.commit('updateCurrentDeckId', 'defaultDeck');
+  created () {
+    this.$store.commit('updateCurrentDeckId', 'defaultDeck')
   },
-  mounted() {
-    this.$emit('homeLoad');
+  mounted () {
+    this.$emit('homeLoad')
   },
   methods: {
-    openDeck(id) {
-      this.$store.commit('updateCurrentDeckId', id);
-      this.$router.push('/deck-editor');
+    openDeck (id) {
+      this.$store.commit('updateCurrentDeckId', id)
+      this.$router.push('/deck-editor')
     },
-    cardOrCards(deckLength) {
+    cardOrCards (deckLength) {
       if (deckLength === 1) {
-        return '';
+        return ''
       } else {
-        return 's';
+        return 's'
       }
     },
-    getTitleAbrev(title) {
+    getTitleAbrev (title) {
       // There shouldn't be any empty title decks, but we can leave this validation here just in case
       if (title === '') {
-        return '';
+        return ''
       } else {
-        const split = title.split(' ')[0];
-        let abrev;
+        const split = title.split(' ')[0]
+        let abrev
         if (split.length === 1) {
-          abrev = split[0].charAt(0) + split[0].charAt(1);
+          abrev = split[0].charAt(0) + split[0].charAt(1)
         } else {
-          abrev = split[0].charAt(0) + split[1].charAt(0);
+          abrev = split[0].charAt(0) + split[1].charAt(0)
         }
-        return abrev;
+        return abrev
       }
     },
-    deleteDeck(id) {
-      this.$store.commit('deleteDeck', id);
+    deleteDeck (id) {
+      this.$store.commit('deleteDeck', id)
     },
-    PWAUpdate(bool) {
-      this.$emit('updatePWA', bool);
-    },
-  },
-};
+    PWAUpdate (bool) {
+      this.$emit('updatePWA', bool)
+    }
+  }
+}
 </script>
 <style scoped>
 .deck-select-main {

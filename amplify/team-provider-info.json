@@ -1,0 +1,28 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-interplanetaryflashc-dev-91844-authRole",
+            "UnauthRoleArn": "arn:aws:iam::669024260177:role/amplify-interplanetaryflashc-dev-91844-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::669024260177:role/amplify-interplanetaryflashc-dev-91844-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-interplanetaryflashc-dev-91844-deployment",
+            "UnauthRoleName": "amplify-interplanetaryflashc-dev-91844-unauthRole",
+            "StackName": "amplify-interplanetaryflashc-dev-91844",
+            "StackId": "arn:aws:cloudformation:us-east-1:669024260177:stack/amplify-interplanetaryflashc-dev-91844/38c8bc40-63a3-11ea-840f-0e23aa861d3d",
+            "AmplifyAppId": "d2hux6scq3cz3t"
+        },
+        "categories": {
+            "function": {
+                "interplanetaryflashcf1ea0c10PostConfirmation": {
+                    "GROUP": "dev-user-group"
+                },
+                "interplanetaryflashcf1ea0c10PreSignup": {
+                    "DOMAINBLACKLIST": "sharklasers.com"
+                }
+            },
+            "auth": {
+                "interplanetaryflashcf1ea0c10": {}
+            }
+        }
+    }
+}

@@ -1,20 +1,36 @@
 <template>
-  <div id="app-main" ref="appMain">
-    <div v-if="!updatePWA" id="splash" :class="splashClass"></div>
-    <div v-if="appleInstallPrompt" id="apple-install-prompt-greyout">
+  <div
+    id="app-main"
+    ref="appMain"
+  >
+    <div
+      v-if="!updatePWA"
+      id="splash"
+      :class="splashClass"
+    />
+    <div
+      v-if="appleInstallPrompt"
+      id="apple-install-prompt-greyout"
+    >
       <div id="apple-install-prompt-padding">
         <div id="apple-install-prompt">
           <p>
             Enjoying our app? To view full screen and get the full IPFC experience, tap the share
             button then add to home screen.
           </p>
-          <img class="apple-prompt-img" src="img/apple-share-icon.png" alt="Apple share icon" />
-          <b-button @click="dismissApplePrompt()">got it</b-button>
+          <img
+            class="apple-prompt-img"
+            src="img/apple-share-icon.png"
+            alt="Apple share icon"
+          >
+          <b-button @click="dismissApplePrompt()">
+            got it
+          </b-button>
           <img
             class="apple-prompt-img"
             src="img/apple-add-to-homescreen-icon.png"
             alt="AppleAdd to homescreen icon"
-          />
+          >
         </div>
       </div>
     </div>
@@ -39,18 +55,18 @@
 </template>
 
 <script>
-import Navbar from './components/Navbar';
-import { AmplifyEventBus } from 'aws-amplify-vue';
-import { Auth } from 'aws-amplify';
-import { mapGetters, mapState } from 'vuex';
-const debounce = require('lodash/debounce');
+import Navbar from './components/Navbar'
+import { AmplifyEventBus } from 'aws-amplify-vue'
+import { Auth } from 'aws-amplify'
+import { mapGetters, mapState } from 'vuex'
+const debounce = require('lodash/debounce')
 
 export default {
   name: 'App',
   components: {
-    Navbar,
+    Navbar
   },
-  data() {
+  data () {
     return {
       signedIn: false,
       newCardClicked: 0,
@@ -61,135 +77,135 @@ export default {
       appleInstallPrompt: false,
       applePromptDissmissed: false,
       chromeInstallPrompt: false,
-      alertBrowserRec: false,
-    };
+      alertBrowserRec: false
+    }
   },
-  beforeCreate() {
+  beforeCreate () {
     AmplifyEventBus.$on('authState', info => {
       if (info === 'signedIn') {
-        this.signedIn = true;
-        this.$router.push('/profile');
+        this.signedIn = true
+        this.$router.push('/profile')
       }
       if (info === 'signedOut') {
-        this.$router.push('/auth');
-        this.signedIn = false;
+        this.$router.push('/auth')
+        this.signedIn = false
       }
-    });
+    })
 
     Auth.currentAuthenticatedUser()
       .then(user => {
-        this.signedIn = true;
+        this.signedIn = true
       })
-      .catch(() => (this.signedIn = false));
+      .catch(() => (this.signedIn = false))
   },
   computed: {
     ...mapGetters(['decksMeta', 'currentDeck']),
-    ...mapState(['currentDeckId', 'decks', 'syncing', 'user_collection', 'initialSync']),
+    ...mapState(['currentDeckId', 'decks', 'syncing', 'user_collection', 'initialSync'])
   },
   watch: {
     user_collection: {
-      handler: function() {
+      handler: function () {
         // console.log(  'sync called from user collection change')
-        this.debouncedSync();
+        this.debouncedSync()
       },
-      deep: true,
+      deep: true
     },
     decks: {
-      handler: function() {
+      handler: function () {
         // console.log(  'sync called from decks change')
-        this.debouncedSync();
+        this.debouncedSync()
       },
-      deep: true,
+      deep: true
     },
-    syncing: function() {
+    syncing: function () {
       // in case there were changes made during sync, try again after each sync
       // console.log(  'sync called from syncing change')
-      this.debouncedSync();
-    },
+      this.debouncedSync()
+    }
   },
-  created: function() {
-    this.splashClass = 'splash';
+  created: function () {
+    this.splashClass = 'splash'
   },
-  mounted: function() {
+  mounted: function () {
     // Chrome 1 - 79
-    const chrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+    const chrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)
     // console.log("chrome", chrome);
-    const userAgent = window.navigator.userAgent.toLowerCase();
+    const userAgent = window.navigator.userAgent.toLowerCase()
     // console.log("user agent", userAgent);
     const isIos = () => {
-      return /iphone|ipad|ipod/.test(userAgent);
-    };
+      return /iphone|ipad|ipod/.test(userAgent)
+    }
     // Detects if device is in standalone mode
     const isInStandaloneMode = () =>
-      'standalone' in window.navigator && window.navigator.standalone;
+      'standalone' in window.navigator && window.navigator.standalone
     // console.log("isInStandaloneMode", isInStandaloneMode());
     // console.log("isIos", isIos());
 
     // Checks if should display install popup notification:
     if (isIos() && !isInStandaloneMode() && !this.promptDissmissed) {
-      this.promptAppleInstall();
+      this.promptAppleInstall()
     }
     if (chrome && !isInStandaloneMode()) {
-      this.promptChromeInstall();
+      this.promptChromeInstall()
     }
     if (!isIos() && !chrome && !isInStandaloneMode()) {
       // console.log('alert rec')
-      this.alertBrowserReccomendation();
+      this.alertBrowserReccomendation()
     }
   },
   methods: {
-    homeLoaded: function() {
-      this.splashClass = 'loaded';
+    homeLoaded: function () {
+      this.splashClass = 'loaded'
     },
-    editClicked: function() {
+    editClicked: function () {
       if (this.currentDeckId === 'reviewDeck') {
-        this.toCardEditorFromReview = true;
+        this.toCardEditorFromReview = true
       } else {
-        this.toCardEditorFromReview = false;
+        this.toCardEditorFromReview = false
       }
     },
-    newCard: function() {
-      this.newCardClicked++;
+    newCard: function () {
+      this.newCardClicked++
       if (this.currentDeckId === 'reviewDeck' || this.currentDeckId === 'defaultDeck') {
-        this.toCardEditorFromReview = true;
-        this.$store.commit('updateCurrentDeckId', this.decksMeta[0].deck_id);
+        this.toCardEditorFromReview = true
+        this.$store.commit('updateCurrentDeckId', this.decksMeta[0].deck_id)
       }
-      this.$store.dispatch('newCard', this.currentDeckId);
-      this.$store.commit('updateCardToEditIndex', this.currentDeck.cards.length - 1);
+      this.$store.dispatch('newCard', this.currentDeckId)
+      this.$store.commit('updateCardToEditIndex', this.currentDeck.cards.length - 1)
       if (this.$route.name !== 'card-editor') {
-        this.$router.push('/card-editor');
+        this.$router.push('/card-editor')
       }
-      this.newCardCommit++;
+      this.newCardCommit++
     },
-    PWAUpdate(bool) {
+    PWAUpdate (bool) {
       if (bool) {
-        this.updatePWA = true;
+        this.updatePWA = true
       } else {
-        this.updatePWA = false;
+        this.updatePWA = false
       }
     },
-    debouncedSync: debounce(function() {
+    debouncedSync: debounce(function () {
       if (!this.syncing && this.initialSync > 1 && this.user_collection.user_id !== 'tutorial') {
-        this.$store.dispatch('cloudSync');
+        this.$store.dispatch('cloudSync')
       }
     }, 15000),
 
-    promptAppleInstall: debounce(function() {
-      this.appleInstallPrompt = true;
+    promptAppleInstall: debounce(function () {
+      this.appleInstallPrompt = true
     }, 30000),
 
-    dismissApplePrompt() {
-      this.appleInstallPrompt = false;
+    dismissApplePrompt () {
+      this.appleInstallPrompt = false
     },
-    promptChromeInstall: debounce(function() {
-      this.chromeInstallPrompt = !this.chromeInstallPrompt;
+    promptChromeInstall: debounce(function () {
+      this.chromeInstallPrompt = !this.chromeInstallPrompt
     }, 30000),
 
-    alertBrowserReccomendation: debounce(function() {
-      this.alertBrowserRec = !this.alertBrowserRec;
-    }, 30000),
-  },
-};
+    alertBrowserReccomendation: debounce(function () {
+      this.alertBrowserRec = !this.alertBrowserRec
+    }, 30000)
+  }
+}
 </script>
 
 <style lang="scss">

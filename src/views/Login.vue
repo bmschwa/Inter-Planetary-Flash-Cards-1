@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="auth">
-      <amplify-authenticator></amplify-authenticator>
+      <amplify-authenticator />
     </div>
 
     <div id="login-body">
@@ -14,16 +14,24 @@
       >
         {{ apiErrorMsg }}
       </b-alert>
-      <b-form id="form-signin" @submit.stop.prevent>
+      <b-form
+        id="form-signin"
+        @submit.stop.prevent
+      >
         <label for="feedback-email">Email</label>
         <b-form-input
           id="feedback-email"
           v-model="input.email"
           :state="emailValidation"
-        ></b-form-input>
-        <b-form-invalid-feedback v-if="input.email" :state="emailValidation">{{
-          emailValidationErrorMsg
-        }}</b-form-invalid-feedback>
+        />
+        <b-form-invalid-feedback
+          v-if="input.email"
+          :state="emailValidation"
+        >
+          {{
+            emailValidationErrorMsg
+          }}
+        </b-form-invalid-feedback>
         <!-- <b-form-valid-feedback :state="emailValidation">Looks Good.</b-form-valid-feedback> -->
 
         <label for="feedback-password">Password</label>
@@ -32,10 +40,15 @@
           v-model="input.password"
           :state="passwordValidation"
           type="password"
-        ></b-form-input>
-        <b-form-invalid-feedback v-if="input.password" :state="passwordValidation">{{
-          passwordValidationErrorMsg
-        }}</b-form-invalid-feedback>
+        />
+        <b-form-invalid-feedback
+          v-if="input.password"
+          :state="passwordValidation"
+        >
+          {{
+            passwordValidationErrorMsg
+          }}
+        </b-form-invalid-feedback>
         <!-- <b-form-valid-feedback :state="passwordValidation">Looks Good.</b-form-valid-feedback> -->
 
         <b-button
@@ -44,33 +57,50 @@
           type="submit"
           variant="primary"
           @click="OpenPinata()"
-          >Get Pinata</b-button
         >
-        <br />
+          Get Pinata
+        </b-button>
+        <br>
 
-        <label v-if="signingUp" for="feedback-pinata-api">Pinata API key</label>
+        <label
+          v-if="signingUp"
+          for="feedback-pinata-api"
+        >Pinata API key</label>
         <b-form-input
           v-if="signingUp"
           id="feedback-pinata-api"
           v-model="input.pinataApi"
           :state="pinataApiValidation"
-        ></b-form-input>
-        <b-form-invalid-feedback v-if="signingUp" :state="pinataApiValidation">{{
-          pinataApiValidationErrorMsg
-        }}</b-form-invalid-feedback>
+        />
+        <b-form-invalid-feedback
+          v-if="signingUp"
+          :state="pinataApiValidation"
+        >
+          {{
+            pinataApiValidationErrorMsg
+          }}
+        </b-form-invalid-feedback>
         <!-- <b-form-valid-feedback v-if="signingUp" :state="pinataApiValidation">Looks Good.</b-form-valid-feedback> -->
 
-        <label v-if="signingUp" for="feedback-pinata-secret">Pinata secret API key</label>
+        <label
+          v-if="signingUp"
+          for="feedback-pinata-secret"
+        >Pinata secret API key</label>
         <b-form-input
           v-if="signingUp"
           id="feedback-pinata-secret"
           v-model="input.pinataSecret"
           :state="pinataSecretValidation"
           type="password"
-        ></b-form-input>
-        <b-form-invalid-feedback v-if="signingUp" :state="pinataSecretValidation">{{
-          pinataSecretValidationErrorMsg
-        }}</b-form-invalid-feedback>
+        />
+        <b-form-invalid-feedback
+          v-if="signingUp"
+          :state="pinataSecretValidation"
+        >
+          {{
+            pinataSecretValidationErrorMsg
+          }}
+        </b-form-invalid-feedback>
         <!-- <b-form-valid-feedback v-if="signingUp" :state="pinataSecretValidation">Looks Good.</b-form-valid-feedback> -->
 
         <span id="login-signup-buttons">
@@ -81,9 +111,12 @@
             variant="primary"
             @click="SignUp()"
           >
-            <font-awesome-icon v-show="loggingIn" icon="spinner" spin />
-            Sign up</b-button
-          >
+            <font-awesome-icon
+              v-show="loggingIn"
+              icon="spinner"
+              spin
+            />
+            Sign up</b-button>
           <b-button
             v-else
             :disabled="loginButtonDisable"
@@ -91,9 +124,12 @@
             variant="primary"
             @click="login()"
           >
-            <font-awesome-icon v-show="loggingIn" icon="spinner" spin />
-            Log in</b-button
-          >
+            <font-awesome-icon
+              v-show="loggingIn"
+              icon="spinner"
+              spin
+            />
+            Log in</b-button>
 
           <b-button
             v-if="signingUp"
@@ -101,248 +137,246 @@
             type="submit"
             variant="secondary"
             @click="toggleSigningUp()"
-            >Log in</b-button
-          >
+          >Log in</b-button>
           <b-button
             v-else
             id="sign-up-a"
             type="submit"
             variant="secondary"
             @click="toggleSigningUp()"
-            >Sign up</b-button
-          >
+          >Sign up</b-button>
         </span>
       </b-form>
     </div>
   </div>
 </template>
 <script>
-import { mapState } from 'vuex';
-import { BForm, BFormInvalidFeedback, BFormInput, BAlert } from 'bootstrap-vue';
-const axios = require('axios');
+import { mapState } from 'vuex'
+import { BForm, BFormInvalidFeedback, BFormInput, BAlert } from 'bootstrap-vue'
+const axios = require('axios')
 
 export default {
   name: 'Login',
   components: { BForm, BFormInvalidFeedback, BFormInput, BAlert },
-  data() {
+  data () {
     return {
       input: {
         email: '',
         password: '',
         pinataApi: '',
-        pinataSecret: '',
+        pinataSecret: ''
       },
       apiErrorMsg: '',
       failedLogin: false,
       dismissSecs: 5,
       dismissCountDown: 0,
       loggingIn: false,
-      signingUp: false,
-    };
+      signingUp: false
+    }
   },
   computed: {
     ...mapState({
-      serverURL: 'serverURL',
+      serverURL: 'serverURL'
     }),
-    emailValidation() {
-      const email = this.input.email;
+    emailValidation () {
+      const email = this.input.email
       if (email.length < 4 || email.length > 25) {
-        return false;
+        return false
       }
       if (!email.includes('@') || !email.includes('.')) {
-        return false;
+        return false
       } else {
-        return true;
+        return true
       }
     },
-    emailValidationErrorMsg() {
-      const email = this.input.email;
+    emailValidationErrorMsg () {
+      const email = this.input.email
       if (email.length < 4 || email.length > 25) {
-        return 'Email must be 5-25 characters long';
+        return 'Email must be 5-25 characters long'
       }
       if (!email.includes('@') || !email.includes('.')) {
-        return 'Invalid email';
+        return 'Invalid email'
       } else {
-        return null;
+        return null
       }
     },
-    passwordValidation() {
-      const password = this.input.password;
+    passwordValidation () {
+      const password = this.input.password
       if (password.length < 8 || password.length > 20) {
-        return false;
+        return false
       } else {
-        return true;
+        return true
       }
     },
-    passwordValidationErrorMsg() {
-      const password = this.input.password;
+    passwordValidationErrorMsg () {
+      const password = this.input.password
       if (password.length < 8 || password.length > 20) {
-        return 'Password must be 8-20 characters long';
+        return 'Password must be 8-20 characters long'
       } else {
-        return null;
+        return null
       }
     },
-    pinataApiValidation() {
-      const pinataApi = this.input.pinataApi;
+    pinataApiValidation () {
+      const pinataApi = this.input.pinataApi
       if (pinataApi.length < 20 || pinataApi.length > 20) {
-        return false;
+        return false
       } else {
-        return true;
+        return true
       }
     },
-    pinataApiValidationErrorMsg() {
-      const pinataApi = this.input.pinataApi;
+    pinataApiValidationErrorMsg () {
+      const pinataApi = this.input.pinataApi
       if (pinataApi.length < 20 || pinataApi.length > 20) {
-        return "Invalid pinata api key. In pinata, click the profile icon, then 'account'";
+        return "Invalid pinata api key. In pinata, click the profile icon, then 'account'"
       } else {
-        return null;
+        return null
       }
     },
-    pinataSecretValidation() {
-      const pinataSecret = this.input.pinataSecret;
+    pinataSecretValidation () {
+      const pinataSecret = this.input.pinataSecret
       if (pinataSecret.length < 64 || pinataSecret.password > 64) {
-        return false;
+        return false
       } else {
-        return true;
+        return true
       }
     },
-    pinataSecretValidationErrorMsg() {
-      const pinataSecret = this.input.pinataSecret;
+    pinataSecretValidationErrorMsg () {
+      const pinataSecret = this.input.pinataSecret
       if (pinataSecret.length < 64 || pinataSecret.length > 64) {
-        return "Invalid pinata api secret key. In pinata, click the profile icon, then 'account'";
+        return "Invalid pinata api secret key. In pinata, click the profile icon, then 'account'"
       } else {
-        return null;
+        return null
       }
     },
-    invalidSignUp() {
+    invalidSignUp () {
       if (
         !this.emailValidation ||
         !this.passwordValidation ||
         !this.pinataApiValidation ||
         !this.pinataSecretValidation
       ) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
     },
-    invalidLogin() {
+    invalidLogin () {
       if (!this.emailValidation || !this.passwordValidation) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
     },
-    loginButtonDisable() {
+    loginButtonDisable () {
       if (!this.emailValidation || !this.passwordValidation || this.loggingIn) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
-    },
+    }
   },
   watch: {
-    failedLogin: function() {
+    failedLogin: function () {
       if (this.failedLogin === true) {
-        this.showAlert();
+        this.showAlert()
       }
-    },
+    }
   },
-  mounted() {
-    this.$emit('homeLoad');
+  mounted () {
+    this.$emit('homeLoad')
   },
   methods: {
-    async callAPI(url, headers, method, callback = null, data = null) {
-      const that = this;
+    async callAPI (url, headers, method, callback = null, data = null) {
+      const that = this
       const options = {
         url: url,
         headers: headers,
-        method: method,
-      };
+        method: method
+      }
       if (data !== null) {
-        options.data = data;
+        options.data = data
       }
       await axios(options)
         .then(response => {
-          console.log(response);
-          data = response.data;
+          console.log(response)
+          data = response.data
           if (callback !== null) {
-            callback(data, that);
+            callback(data, that)
           }
-          return data;
+          return data
         })
-        .catch(function(err) {
-          that.failedLogin = true;
-          that.apiErrorMsg = err;
-        });
+        .catch(function (err) {
+          that.failedLogin = true
+          that.apiErrorMsg = err
+        })
     },
-    login() {
-      this.loggingIn = true;
-      this.failedLogin = false;
-      const loginURL = this.serverURL + '/login';
-      const username = this.input.email;
-      const password = this.input.password;
+    login () {
+      this.loggingIn = true
+      this.failedLogin = false
+      const loginURL = this.serverURL + '/login'
+      const username = this.input.email
+      const password = this.input.password
       const headers = {
         'Content-Type': 'application/json',
-        Authorization: 'Basic ' + btoa(username + ':' + password),
-      };
-      const loginCallback = function(data, that) {
-        console.log(data);
+        Authorization: 'Basic ' + btoa(username + ':' + password)
+      }
+      const loginCallback = function (data, that) {
+        console.log(data)
         if (!data.token) {
-          that.failedLogin = true;
-          that.apiErrorMsg = data.error;
+          that.failedLogin = true
+          that.apiErrorMsg = data.error
         } else {
-          that.$store.commit('updateJwt', data.token);
-          that.$store.dispatch('checkJwt');
-          that.$store.commit('updatePinataKeys', data.pinata_keys);
-          const userCollection = that.$store.state.user_collection;
-          userCollection.user_id = data.user_id;
-          that.$store.commit('updateUserCollection', userCollection);
-          that.$store.commit('updateInitialSync', 0);
-          that.$router.push('home');
+          that.$store.commit('updateJwt', data.token)
+          that.$store.dispatch('checkJwt')
+          that.$store.commit('updatePinataKeys', data.pinata_keys)
+          const userCollection = that.$store.state.user_collection
+          userCollection.user_id = data.user_id
+          that.$store.commit('updateUserCollection', userCollection)
+          that.$store.commit('updateInitialSync', 0)
+          that.$router.push('home')
         }
-        that.loggingIn = false;
-      };
-      this.callAPI(loginURL, headers, 'GET', loginCallback);
+        that.loggingIn = false
+      }
+      this.callAPI(loginURL, headers, 'GET', loginCallback)
     },
-    SignUp() {
-      this.loggingIn = true;
-      this.failedLogin = false;
-      const signupURL = this.serverURL + '/sign_up';
+    SignUp () {
+      this.loggingIn = true
+      this.failedLogin = false
+      const signupURL = this.serverURL + '/sign_up'
       const data = {
         email: this.input.email,
         password: this.input.password,
         pinata_api: this.input.pinataApi,
-        pinata_key: this.input.pinataSecret,
-      };
-      const headers = { 'Content-Type': 'application/json' };
-      const signupCallback = function(data, that) {
-        console.log(data);
+        pinata_key: this.input.pinataSecret
+      }
+      const headers = { 'Content-Type': 'application/json' }
+      const signupCallback = function (data, that) {
+        console.log(data)
         if (!data.message) {
-          that.failedLogin = true;
-          that.apiErrorMsg = data.error;
+          that.failedLogin = true
+          that.apiErrorMsg = data.error
         } else {
-          that.login();
+          that.login()
         }
-        that.loggingIn = false;
-      };
-      this.callAPI(signupURL, headers, 'POST', signupCallback, data);
+        that.loggingIn = false
+      }
+      this.callAPI(signupURL, headers, 'POST', signupCallback, data)
     },
-    toggleSigningUp() {
-      this.signingUp = !this.signingUp;
+    toggleSigningUp () {
+      this.signingUp = !this.signingUp
     },
 
-    OpenPinata() {
-      window.open('https://pinata.cloud/signup', '_blank');
+    OpenPinata () {
+      window.open('https://pinata.cloud/signup', '_blank')
     },
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
+    countDownChanged (dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
     },
-    showAlert() {
-      this.dismissCountDown = this.dismissSecs;
-    },
-  },
-};
+    showAlert () {
+      this.dismissCountDown = this.dismissSecs
+    }
+  }
+}
 </script>
 
 <style scoped>

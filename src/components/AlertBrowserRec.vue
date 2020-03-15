@@ -14,31 +14,31 @@
 </template>
 
 <script>
-import { BAlert } from 'bootstrap-vue';
+import { BAlert } from 'bootstrap-vue'
 export default {
   components: {
-    BAlert,
+    BAlert
   },
   props: { alertBrowserRec: { type: Boolean } },
   data: () => ({
     dismissSecs: 8,
     dismissCountDown: 0,
-    alertTxt: `For full screen mode and faster loading, open the app in Chrome(Android/Desktop) or Safari(iOS) and click 'add to homescreen'`,
+    alertTxt: 'For full screen mode and faster loading, open the app in Chrome(Android/Desktop) or Safari(iOS) and click \'add to homescreen\''
   }),
   watch: {
-    alertBrowserRec() {
-      this.showAlert();
-    },
+    alertBrowserRec () {
+      this.showAlert()
+    }
   },
   methods: {
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
+    countDownChanged (dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
     },
-    showAlert() {
-      this.dismissCountDown = this.dismissSecs;
-    },
-  },
-};
+    showAlert () {
+      this.dismissCountDown = this.dismissSecs
+    }
+  }
+}
 </script>
 
 <style scoped>

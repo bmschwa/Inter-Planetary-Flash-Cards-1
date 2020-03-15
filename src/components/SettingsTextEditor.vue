@@ -1,13 +1,26 @@
 <template>
-  <b-container id="main" fluid>
-    <b-list-group-item button @click="openTextEditorSettings()">
+  <b-container
+    id="main"
+    fluid
+  >
+    <b-list-group-item
+      button
+      @click="openTextEditorSettings()"
+    >
       Text Editor
     </b-list-group-item>
-    <b-list-group v-if="textEditorSettingsOpen" class="second-layer-settings">
+    <b-list-group
+      v-if="textEditorSettingsOpen"
+      class="second-layer-settings"
+    >
       <b-container fluid>
         <b-row>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleBold()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleBold()"
+            >
               <b-container>
                 <b-row>
                   <p>bold</p>
@@ -26,7 +39,11 @@
             </b-list-group-item>
           </b-col>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleItalic()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleItalic()"
+            >
               <b-container>
                 <b-row>
                   <p>italic</p>
@@ -47,7 +64,11 @@
         </b-row>
         <b-row>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleUnderline()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleUnderline()"
+            >
               <b-container>
                 <b-row>
                   <p>underline</p>
@@ -66,7 +87,11 @@
             </b-list-group-item>
           </b-col>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleStrike()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleStrike()"
+            >
               <b-container>
                 <b-row>
                   <p>strike</p>
@@ -87,7 +112,11 @@
         </b-row>
         <b-row>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleSubScript()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleSubScript()"
+            >
               <b-container>
                 <b-row>
                   <p>sub script</p>
@@ -106,7 +135,11 @@
             </b-list-group-item>
           </b-col>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleCodeBlock()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleCodeBlock()"
+            >
               <b-container>
                 <b-row>
                   <p>code block</p>
@@ -127,7 +160,11 @@
         </b-row>
         <b-row>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleSuperScript()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleSuperScript()"
+            >
               <b-container>
                 <b-row>
                   <p>super script</p>
@@ -146,7 +183,11 @@
             </b-list-group-item>
           </b-col>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleSize()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleSize()"
+            >
               <b-container>
                 <b-row>
                   <p>size</p>
@@ -167,7 +208,11 @@
         </b-row>
         <b-row>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleHeadings()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleHeadings()"
+            >
               <b-container>
                 <b-row>
                   <p>headings</p>
@@ -186,7 +231,11 @@
             </b-list-group-item>
           </b-col>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleColor()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleColor()"
+            >
               <b-container>
                 <b-row>
                   <p>color</p>
@@ -207,7 +256,11 @@
         </b-row>
         <b-row>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleBackground()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleBackground()"
+            >
               <b-container>
                 <b-row>
                   <p>background</p>
@@ -226,7 +279,11 @@
             </b-list-group-item>
           </b-col>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleAlign()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleAlign()"
+            >
               <b-container>
                 <b-row>
                   <p>alignment</p>
@@ -247,7 +304,11 @@
         </b-row>
         <b-row>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleList()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleList()"
+            >
               <b-container>
                 <b-row>
                   <p>list</p>
@@ -266,7 +327,11 @@
             </b-list-group-item>
           </b-col>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleBlockquote()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleBlockquote()"
+            >
               <b-container>
                 <b-row>
                   <p>block quote</p>
@@ -287,7 +352,11 @@
         </b-row>
         <b-row>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleFont()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleFont()"
+            >
               <b-container>
                 <b-row>
                   <p>font</p>
@@ -306,7 +375,11 @@
             </b-list-group-item>
           </b-col>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleClean()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleClean()"
+            >
               <b-container>
                 <b-row>
                   <p>clear formats</p>
@@ -327,7 +400,11 @@
         </b-row>
         <b-row>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleImage()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleImage()"
+            >
               <b-container>
                 <b-row>
                   <p>image</p>
@@ -346,7 +423,11 @@
             </b-list-group-item>
           </b-col>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleLink()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleLink()"
+            >
               <b-container>
                 <b-row>
                   <p>link</p>
@@ -367,7 +448,11 @@
         </b-row>
         <b-row>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleVideo()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleVideo()"
+            >
               <b-container>
                 <b-row>
                   <p>video</p>
@@ -386,7 +471,11 @@
             </b-list-group-item>
           </b-col>
           <b-col class="setting-col">
-            <b-list-group-item class="text-editor-option" button @click="toggleFormula()">
+            <b-list-group-item
+              class="text-editor-option"
+              button
+              @click="toggleFormula()"
+            >
               <b-container>
                 <b-row>
                   <p>formula</p>
@@ -415,7 +504,7 @@
             v-highlight
             class="quill"
             :options="editorOptions"
-          ></quill-editor>
+          />
         </b-list-group-item>
       </b-container>
     </b-list-group>
@@ -423,18 +512,18 @@
 </template>
 
 <script>
-import { BListGroup, BListGroupItem } from 'bootstrap-vue';
-import { isEqual } from 'lodash/core';
-import { Quill, quillEditor } from 'vue-quill-editor';
-import 'quill/dist/quill.snow.css';
-import imageUpload from 'quill-plugin-image-upload';
-Quill.register('modules/imageUpload', imageUpload);
-const axios = require('axios');
-const FormData = require('form-data');
+import { BListGroup, BListGroupItem } from 'bootstrap-vue'
+import { isEqual } from 'lodash/core'
+import { Quill, quillEditor } from 'vue-quill-editor'
+import 'quill/dist/quill.snow.css'
+import imageUpload from 'quill-plugin-image-upload'
+Quill.register('modules/imageUpload', imageUpload)
+const axios = require('axios')
+const FormData = require('form-data')
 export default {
   name: 'TextEditorSettings',
   components: { BListGroup, BListGroupItem, quillEditor },
-  data() {
+  data () {
     return {
       textEditorSettingsOpen: false,
       quillReRenderKey: 0,
@@ -467,225 +556,225 @@ export default {
         image: null,
         link: null,
         formula: null,
-        video: null,
+        video: null
       },
-      editorText: 'Try out the settings here',
-    };
+      editorText: 'Try out the settings here'
+    }
   },
   computed: {
-    editorOptions() {
+    editorOptions () {
       return {
         theme: 'snow',
         modules: {
           imageUpload: {
             upload: file => {
-              const gateway = 'https://gateway.pinata.cloud/ipfs/';
-              const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
-              const data = new FormData();
-              data.append('file', file);
+              const gateway = 'https://gateway.pinata.cloud/ipfs/'
+              const url = 'https://api.pinata.cloud/pinning/pinFileToIPFS'
+              const data = new FormData()
+              data.append('file', file)
               const metadata = JSON.stringify({
                 name: 'testname',
                 keyvalues: {
-                  exampleKey: 'exampleValue',
-                },
-              });
-              data.append('pinataMetadata', metadata);
+                  exampleKey: 'exampleValue'
+                }
+              })
+              data.append('pinataMetadata', metadata)
               return axios
                 .post(url, data, {
                   maxContentLength: 'Infinity', // this is needed to prevent axios from erroring out with large files
                   headers: {
                     'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
                     pinata_api_key: this.pinataKeys.pinata_api,
-                    pinata_secret_api_key: this.pinataKeys.pinata_key,
-                  },
+                    pinata_secret_api_key: this.pinataKeys.pinata_key
+                  }
                 })
-                .then(function(response) {
-                  return gateway + response.data.IpfsHash;
+                .then(function (response) {
+                  return gateway + response.data.IpfsHash
                 })
-                .catch(function() {
+                .catch(function () {
                   // console.log(error)
-                });
-            },
+                })
+            }
           },
           toolbar: this.toolbar,
           syntax: {
-            highlight: text => window.hljs.highlightAuto(text).value,
+            highlight: text => window.hljs.highlightAuto(text).value
           },
           history: {
             delay: 2000,
             maxStack: 500,
-            userOnly: true,
-          },
-        },
-      };
-    },
-    toolbar() {
-      if (this.$store.state.user_collection.webapp_settings.text_editor.options.toolbar) {
-        return this.$store.state.user_collection.webapp_settings.text_editor.options.toolbar;
-      } else {
-        return ['bold'];
+            userOnly: true
+          }
+        }
       }
     },
+    toolbar () {
+      if (this.$store.state.user_collection.webapp_settings.text_editor.options.toolbar) {
+        return this.$store.state.user_collection.webapp_settings.text_editor.options.toolbar
+      } else {
+        return ['bold']
+      }
+    }
   },
   watch: {
     toolbar: {
-      handler: function() {
-        this.resetTextEditorMenu();
+      handler: function () {
+        this.resetTextEditorMenu()
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   methods: {
-    openTextEditorSettings() {
-      this.resetTextEditorMenu();
-      this.textEditorSettingsOpen = !this.textEditorSettingsOpen;
+    openTextEditorSettings () {
+      this.resetTextEditorMenu()
+      this.textEditorSettingsOpen = !this.textEditorSettingsOpen
     },
-    resetTextEditorMenu() {
+    resetTextEditorMenu () {
       if (this.toolbar.includes('bold')) {
-        this.toolbarContent.bold = true;
+        this.toolbarContent.bold = true
       } else {
-        this.toolbarContent.bold = false;
+        this.toolbarContent.bold = false
       }
       if (this.toolbar.includes('italic')) {
-        this.toolbarContent.italic = true;
+        this.toolbarContent.italic = true
       } else {
-        this.toolbarContent.italic = false;
+        this.toolbarContent.italic = false
       }
       if (this.toolbar.includes('underline')) {
-        this.toolbarContent.underline = true;
+        this.toolbarContent.underline = true
       } else {
-        this.toolbarContent.underline = false;
+        this.toolbarContent.underline = false
       }
       if (this.toolbar.includes('strike')) {
-        this.toolbarContent.strike = true;
+        this.toolbarContent.strike = true
       } else {
-        this.toolbarContent.strike = false;
+        this.toolbarContent.strike = false
       }
       if (this.toolbar.includes('code-block')) {
-        this.toolbarContent.codeBlock = true;
+        this.toolbarContent.codeBlock = true
       } else {
-        this.toolbarContent.codeBlock = false;
+        this.toolbarContent.codeBlock = false
       }
       for (const i of this.toolbar) {
         if (isEqual(i, this.toolbarContent.subScriptObj)) {
           if (i.script === this.toolbarContent.subScriptObj.script) {
-            this.toolbarContent.subScript = true;
-            break;
+            this.toolbarContent.subScript = true
+            break
           }
         } else {
-          this.toolbarContent.subScript = false;
+          this.toolbarContent.subScript = false
         }
       }
       for (const i of this.toolbar) {
         if (isEqual(i, this.toolbarContent.superScriptObj)) {
           if (i.script === this.toolbarContent.superScriptObj.script) {
-            this.toolbarContent.superScript = true;
-            break;
+            this.toolbarContent.superScript = true
+            break
           }
         } else {
-          this.toolbarContent.superScript = false;
+          this.toolbarContent.superScript = false
         }
       }
       for (const i of this.toolbar) {
         if (isEqual(i, this.toolbarContent.sizeObj)) {
-          this.toolbarContent.size = true;
-          break;
+          this.toolbarContent.size = true
+          break
         } else {
-          this.toolbarContent.size = false;
+          this.toolbarContent.size = false
         }
       }
       for (const i of this.toolbar) {
         if (isEqual(i, this.toolbarContent.headingsObj)) {
-          this.toolbarContent.headings = true;
-          break;
+          this.toolbarContent.headings = true
+          break
         } else {
-          this.toolbarContent.headings = false;
+          this.toolbarContent.headings = false
         }
       }
       for (const i of this.toolbar) {
         if (isEqual(i, this.toolbarContent.colorObj)) {
-          this.toolbarContent.color = true;
-          break;
+          this.toolbarContent.color = true
+          break
         } else {
-          this.toolbarContent.color = false;
+          this.toolbarContent.color = false
         }
       }
       for (const i of this.toolbar) {
         if (isEqual(i, this.toolbarContent.backgroundObj)) {
-          this.toolbarContent.background = true;
-          break;
+          this.toolbarContent.background = true
+          break
         } else {
-          this.toolbarContent.background = false;
+          this.toolbarContent.background = false
         }
       }
       for (const i of this.toolbar) {
         if (isEqual(i, this.toolbarContent.alignObj)) {
-          this.toolbarContent.align = true;
-          break;
+          this.toolbarContent.align = true
+          break
         } else {
-          this.toolbarContent.align = false;
+          this.toolbarContent.align = false
         }
       }
       for (const i of this.toolbar) {
         if (isEqual(i, this.toolbarContent.fontObj)) {
-          this.toolbarContent.font = true;
-          break;
+          this.toolbarContent.font = true
+          break
         } else {
-          this.toolbarContent.font = false;
+          this.toolbarContent.font = false
         }
       }
       if (this.toolbar.includes('clean')) {
-        this.toolbarContent.clean = true;
+        this.toolbarContent.clean = true
       } else {
-        this.toolbarContent.clean = false;
+        this.toolbarContent.clean = false
       }
       if (this.toolbar.includes('image')) {
-        this.toolbarContent.image = true;
+        this.toolbarContent.image = true
       } else {
-        this.toolbarContent.image = false;
+        this.toolbarContent.image = false
       }
       if (this.toolbar.includes('link')) {
-        this.toolbarContent.link = true;
+        this.toolbarContent.link = true
       } else {
-        this.toolbarContent.link = false;
+        this.toolbarContent.link = false
       }
       if (this.toolbar.includes('video')) {
-        this.toolbarContent.video = true;
+        this.toolbarContent.video = true
       } else {
-        this.toolbarContent.video = false;
+        this.toolbarContent.video = false
       }
       if (this.toolbar.includes('formula')) {
-        this.toolbarContent.formula = true;
+        this.toolbarContent.formula = true
       } else {
-        this.toolbarContent.formula = false;
+        this.toolbarContent.formula = false
       }
       for (const i of this.toolbar) {
         if (isEqual(i, this.toolbarContent.listObj)) {
-          this.toolbarContent.list = true;
-          break;
+          this.toolbarContent.list = true
+          break
         } else {
-          this.toolbarContent.list = false;
+          this.toolbarContent.list = false
         }
       }
       if (this.toolbar.includes('blockquote')) {
-        this.toolbarContent.blockquote = true;
+        this.toolbarContent.blockquote = true
       } else {
-        this.toolbarContent.blockquote = false;
+        this.toolbarContent.blockquote = false
       }
     },
-    updateToolbar(value, bool) {
-      const newToolbar = JSON.parse(JSON.stringify(this.toolbar));
-      let existsCount = 0;
+    updateToolbar (value, bool) {
+      const newToolbar = JSON.parse(JSON.stringify(this.toolbar))
+      let existsCount = 0
       // to fix funkyness with lodash seeing scriptobj and subscriptobj as equal
       if (value.script) {
         for (const i of newToolbar) {
           if (i.script) {
             if (i.script === value.script) {
-              existsCount++;
+              existsCount++
               if (!bool) {
-                const toDeleteIndex = newToolbar.indexOf(i);
-                newToolbar.splice(toDeleteIndex, 1);
-                break;
+                const toDeleteIndex = newToolbar.indexOf(i)
+                newToolbar.splice(toDeleteIndex, 1)
+                break
               }
             }
           }
@@ -693,109 +782,109 @@ export default {
       } else {
         for (const i of newToolbar) {
           if (isEqual(i, value)) {
-            existsCount++;
+            existsCount++
             if (!bool) {
-              const toDeleteIndex = newToolbar.indexOf(i);
-              newToolbar.splice(toDeleteIndex, 1);
-              break;
+              const toDeleteIndex = newToolbar.indexOf(i)
+              newToolbar.splice(toDeleteIndex, 1)
+              break
             }
           }
         }
       }
       if (bool && existsCount === 0) {
-        newToolbar.push(value);
+        newToolbar.push(value)
       }
-      const editorOptions = { toolbar: newToolbar };
+      const editorOptions = { toolbar: newToolbar }
       const settingData = {
         settingSection: 'text_editor',
         settingName: 'options',
-        setting: editorOptions,
-      };
-      this.$store.commit('updateSetting', settingData);
-      this.quillReRenderKey++;
+        setting: editorOptions
+      }
+      this.$store.commit('updateSetting', settingData)
+      this.quillReRenderKey++
     },
-    toggleBold() {
-      this.toolbarContent.bold = !this.toolbarContent.bold;
-      this.updateToolbar('bold', this.toolbarContent.bold);
+    toggleBold () {
+      this.toolbarContent.bold = !this.toolbarContent.bold
+      this.updateToolbar('bold', this.toolbarContent.bold)
     },
-    toggleItalic() {
-      this.toolbarContent.italic = !this.toolbarContent.italic;
-      this.updateToolbar('italic', this.toolbarContent.italic);
+    toggleItalic () {
+      this.toolbarContent.italic = !this.toolbarContent.italic
+      this.updateToolbar('italic', this.toolbarContent.italic)
     },
-    toggleUnderline() {
-      this.toolbarContent.underline = !this.toolbarContent.underline;
-      this.updateToolbar('underline', this.toolbarContent.underline);
+    toggleUnderline () {
+      this.toolbarContent.underline = !this.toolbarContent.underline
+      this.updateToolbar('underline', this.toolbarContent.underline)
     },
-    toggleStrike() {
-      this.toolbarContent.strike = !this.toolbarContent.strike;
-      this.updateToolbar('strike', this.toolbarContent.strike);
+    toggleStrike () {
+      this.toolbarContent.strike = !this.toolbarContent.strike
+      this.updateToolbar('strike', this.toolbarContent.strike)
     },
-    toggleCodeBlock() {
-      this.toolbarContent.codeBlock = !this.toolbarContent.codeBlock;
-      this.updateToolbar('code-block', this.toolbarContent.codeBlock);
+    toggleCodeBlock () {
+      this.toolbarContent.codeBlock = !this.toolbarContent.codeBlock
+      this.updateToolbar('code-block', this.toolbarContent.codeBlock)
     },
-    toggleSubScript() {
-      this.toolbarContent.subScript = !this.toolbarContent.subScript;
-      this.updateToolbar(this.toolbarContent.subScriptObj, this.toolbarContent.subScript);
+    toggleSubScript () {
+      this.toolbarContent.subScript = !this.toolbarContent.subScript
+      this.updateToolbar(this.toolbarContent.subScriptObj, this.toolbarContent.subScript)
     },
-    toggleSuperScript() {
-      this.toolbarContent.superScript = !this.toolbarContent.superScript;
-      this.updateToolbar(this.toolbarContent.superScriptObj, this.toolbarContent.superScript);
+    toggleSuperScript () {
+      this.toolbarContent.superScript = !this.toolbarContent.superScript
+      this.updateToolbar(this.toolbarContent.superScriptObj, this.toolbarContent.superScript)
     },
-    toggleSize() {
-      this.toolbarContent.size = !this.toolbarContent.size;
-      this.updateToolbar(this.toolbarContent.sizeObj, this.toolbarContent.size);
+    toggleSize () {
+      this.toolbarContent.size = !this.toolbarContent.size
+      this.updateToolbar(this.toolbarContent.sizeObj, this.toolbarContent.size)
     },
-    toggleHeadings() {
-      this.toolbarContent.headings = !this.toolbarContent.headings;
-      this.updateToolbar(this.toolbarContent.headingsObj, this.toolbarContent.headings);
+    toggleHeadings () {
+      this.toolbarContent.headings = !this.toolbarContent.headings
+      this.updateToolbar(this.toolbarContent.headingsObj, this.toolbarContent.headings)
     },
-    toggleColor() {
-      this.toolbarContent.color = !this.toolbarContent.color;
-      this.updateToolbar(this.toolbarContent.colorObj, this.toolbarContent.color);
+    toggleColor () {
+      this.toolbarContent.color = !this.toolbarContent.color
+      this.updateToolbar(this.toolbarContent.colorObj, this.toolbarContent.color)
     },
-    toggleBackground() {
-      this.toolbarContent.background = !this.toolbarContent.background;
-      this.updateToolbar(this.toolbarContent.backgroundObj, this.toolbarContent.background);
+    toggleBackground () {
+      this.toolbarContent.background = !this.toolbarContent.background
+      this.updateToolbar(this.toolbarContent.backgroundObj, this.toolbarContent.background)
     },
-    toggleAlign() {
-      this.toolbarContent.align = !this.toolbarContent.align;
-      this.updateToolbar(this.toolbarContent.alignObj, this.toolbarContent.align);
+    toggleAlign () {
+      this.toolbarContent.align = !this.toolbarContent.align
+      this.updateToolbar(this.toolbarContent.alignObj, this.toolbarContent.align)
     },
-    toggleFont() {
-      this.toolbarContent.font = !this.toolbarContent.font;
-      this.updateToolbar(this.toolbarContent.fontObj, this.toolbarContent.font);
+    toggleFont () {
+      this.toolbarContent.font = !this.toolbarContent.font
+      this.updateToolbar(this.toolbarContent.fontObj, this.toolbarContent.font)
     },
-    toggleClean() {
-      this.toolbarContent.clean = !this.toolbarContent.clean;
-      this.updateToolbar('clean', this.toolbarContent.clean);
+    toggleClean () {
+      this.toolbarContent.clean = !this.toolbarContent.clean
+      this.updateToolbar('clean', this.toolbarContent.clean)
     },
-    toggleImage() {
-      this.toolbarContent.image = !this.toolbarContent.image;
-      this.updateToolbar('image', this.toolbarContent.image);
+    toggleImage () {
+      this.toolbarContent.image = !this.toolbarContent.image
+      this.updateToolbar('image', this.toolbarContent.image)
     },
-    toggleLink() {
-      this.toolbarContent.link = !this.toolbarContent.link;
-      this.updateToolbar('link', this.toolbarContent.link);
+    toggleLink () {
+      this.toolbarContent.link = !this.toolbarContent.link
+      this.updateToolbar('link', this.toolbarContent.link)
     },
-    toggleVideo() {
-      this.toolbarContent.video = !this.toolbarContent.video;
-      this.updateToolbar('video', this.toolbarContent.video);
+    toggleVideo () {
+      this.toolbarContent.video = !this.toolbarContent.video
+      this.updateToolbar('video', this.toolbarContent.video)
     },
-    toggleFormula() {
-      this.toolbarContent.formula = !this.toolbarContent.formula;
-      this.updateToolbar('formula', this.toolbarContent.formula);
+    toggleFormula () {
+      this.toolbarContent.formula = !this.toolbarContent.formula
+      this.updateToolbar('formula', this.toolbarContent.formula)
     },
-    toggleList() {
-      this.toolbarContent.list = !this.toolbarContent.list;
-      this.updateToolbar(this.toolbarContent.listObj, this.toolbarContent.list);
+    toggleList () {
+      this.toolbarContent.list = !this.toolbarContent.list
+      this.updateToolbar(this.toolbarContent.listObj, this.toolbarContent.list)
     },
-    toggleBlockquote() {
-      this.toolbarContent.blockquote = !this.toolbarContent.blockquote;
-      this.updateToolbar('blockquote', this.toolbarContent.blockquote);
-    },
-  },
-};
+    toggleBlockquote () {
+      this.toolbarContent.blockquote = !this.toolbarContent.blockquote
+      this.updateToolbar('blockquote', this.toolbarContent.blockquote)
+    }
+  }
+}
 </script>
 
 <style scoped>

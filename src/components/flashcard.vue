@@ -1,11 +1,25 @@
 <template>
   <div :class="flipped ? 'flip-container flipped' : 'flip-container'">
     <div class="flipper">
-      <div :style="{ backgroundColor: colorFront }" class="flashcard front">
-        <div v-highlight v-dompurify-html="front" class="card-content" />
+      <div
+        :style="{ backgroundColor: colorFront }"
+        class="flashcard front"
+      >
+        <div
+          v-highlight
+          v-dompurify-html="front"
+          class="card-content"
+        />
       </div>
-      <div :style="{ backgroundColor: colorBack }" class="flashcard back">
-        <div v-highlight v-dompurify-html="back" class="card-content" />
+      <div
+        :style="{ backgroundColor: colorBack }"
+        class="flashcard back"
+      >
+        <div
+          v-highlight
+          v-dompurify-html="back"
+          class="card-content"
+        />
       </div>
     </div>
   </div>
@@ -15,30 +29,30 @@ export default {
   props: {
     front: {
       type: String,
-      default: '',
+      default: ''
     },
     back: {
       type: String,
-      default: '',
+      default: ''
     },
     // Need to add a quill.js module for this
     colorFront: {
       type: String,
-      default: 'white',
+      default: 'white'
     },
     colorBack: {
       type: String,
-      default: 'white',
+      default: 'white'
     },
     flipped: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
-  data() {
-    return {};
-  },
-};
+  data () {
+    return {}
+  }
+}
 </script>
 
 <style scoped>

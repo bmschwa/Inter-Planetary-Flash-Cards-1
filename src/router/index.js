@@ -1,39 +1,55 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import store from '../store';
+import Vue from 'vue'
+import Router from 'vue-router'
+import store from '../store'
 
-import Home from '../components/Home';
-import Profile from '../components/Profile';
-import Auth from '../components/Auth';
-import Protected from '../components/Protected';
+import Home from '../components/Home'
+import Profile from '../components/Profile'
+import Auth from '../components/Auth'
+import Protected from '../components/Protected'
+
+// https://www.npmjs.com/package/vuejs-logger#code-example
+import VueLogger from 'vuejs-logger'
+const isProduction = process.env.NODE_ENV === 'production'
+
+const loggingOptions = {
+  isEnabled: true,
+  logLevel: isProduction ? 'error' : 'debug',
+  stringifyArguments: false,
+  showLogLevel: true,
+  showMethodName: true,
+  separator: '|',
+  showConsoleColors: true
+}
+
+Vue.use(VueLogger, loggingOptions)
 
 // const Login = () => import('../views/Login.vue');
 //  const Home = () => import('../views/Home.vue');
-const DeckSelection = () => import('../views/DeckSelection.vue');
-const DeckEditor = () => import('../views/DeckEditor.vue');
-const Settings = () => import('../views/Settings.vue');
-const CardEditor = () => import('../views/CardEditor.vue');
+const DeckSelection = () => import('../views/DeckSelection.vue')
+const DeckEditor = () => import('../views/DeckEditor.vue')
+const Settings = () => import('../views/Settings.vue')
+const CardEditor = () => import('../views/CardEditor.vue')
 
-Vue.use(Router);
+Vue.use(Router)
 
-async function redirectIfNotAuth(to, from, next) {
+async function redirectIfNotAuth (to, from, next) {
   if (store.getters.isAuthenticated) {
-    next();
+    next()
   } else {
-    await store.dispatch('checkJwt');
+    await store.dispatch('checkJwt')
     if (store.getters.isAuthenticated) {
-      next();
+      next()
     } else {
-      next('/login');
+      next('/login')
     }
   }
 }
 
-function redirectIfNoUserCollection(to, from, next) {
+function redirectIfNoUserCollection (to, from, next) {
   if (store.state.user_collection !== null) {
-    next();
+    next()
   } else {
-    next('home');
+    next('home')
   }
 }
 
@@ -42,79 +58,84 @@ const router = new Router({
   routes: [
     {
       path: '/index.html',
-      component: Home,
+      component: Home
     },
     {
       path: '/auth',
-      component: Auth,
+      component: Auth
     },
     {
       path: '/protected',
       component: Protected,
       meta: {
-        requiresAuth: true,
-      },
+        requiresAuth: true
+      }
     },
-      { path: '/profile', component: Profile, meta: { requiresAuth: true,} },
+    { path: '/profile', component: Profile, meta: { requiresAuth: true } },
     {
       path: '/',
       redirect: {
-        name: 'home',
-      },
+        name: 'home'
+      }
     },
     {
       path: '/login',
       name: 'login',
       component: Auth,
-      beforeEnter: redirectIfNoUserCollection,
+      beforeEnter: redirectIfNoUserCollection
     },
     {
       path: '/home',
       name: 'home',
-      component: Home,
+      component: Home
     },
     {
       path: '/deck-selection',
       name: 'deck-selection',
       component: DeckSelection,
-      beforeEnter: redirectIfNotAuth,
+      beforeEnter: redirectIfNotAuth
     },
     {
       path: '/deck-editor',
       name: 'deck-editor',
       component: DeckEditor,
-      beforeEnter: redirectIfNotAuth,
+      beforeEnter: redirectIfNotAuth
     },
     {
       path: '/settings',
       name: 'settings',
       component: Settings,
-      beforeEnter: redirectIfNotAuth,
+      beforeEnter: redirectIfNotAuth
     },
     {
       path: '/card-editor',
       name: 'card-editor',
       component: CardEditor,
-      props: true,
-    },
-  ],
-});
+      props: true
+    }
+  ]
+})
 
 router.beforeResolve((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        let user;
-        Vue.prototype.$Amplify.Auth.currentAuthenticatedUser().then(data => {
-            if (data && data.signInUserSession) {
-                user = data;
-            }
-            next()
-        }).catch((e) => {
-            next({
-                path: '/auth'
-            });
-        });
-    }
-    next()
-});
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    Vue.prototype.$Amplify.Auth.currentAuthenticatedUser().then(data => {
+      if (data && data.signInUserSession) {
+        const user = data
+        console.log(user)
+      } else {
+        next({
+          path: '/auth'
+        })
+      }
 
-export default router;
+      next()
+    }).catch((e) => {
+      next({
+        path: '/auth'
+      })
+    })
+  }
+  next()
+})
+
+export default router

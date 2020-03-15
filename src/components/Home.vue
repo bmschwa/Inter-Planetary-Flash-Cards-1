@@ -1,11 +1,21 @@
 <template>
-  <b-container id="home-main" ref="homeBody" fluid>
+  <b-container
+    id="home-main"
+    ref="homeBody"
+    fluid
+  >
     <alert-failed-sync />
     <alert-offline :display="alertOffline" />
     <alert-update-pwa @updatePWA="PWAUpdate(bool)" />
     <alert-browser-rec :alert-browser-rec="alertBrowserRec" />
-    <b-container v-if="todaysDeck.cards.length > 0" id="review-body">
-      <b-row v-if="!spinner" id="top-buttons-row">
+    <b-container
+      v-if="todaysDeck.cards.length > 0"
+      id="review-body"
+    >
+      <b-row
+        v-if="!spinner"
+        id="top-buttons-row"
+      >
         <a id="edit">
           <font-awesome-icon
             size="1x"
@@ -27,8 +37,8 @@
               switchCardSequence && correctAnswer
                 ? 'throw-right'
                 : switchCardSequence && !correctAnswer
-                ? 'throw-left'
-                : ''
+                  ? 'throw-left'
+                  : ''
             "
           >
             <vue-flashcard
@@ -40,18 +50,24 @@
               :flipped="cardFlipToggle"
               :front="currentCard.front_rich_text"
               :back="currentCard.back_rich_text"
-            ></vue-flashcard>
+            />
           </span>
-          <div id="next-card-padding" class="card-padding">
+          <div
+            id="next-card-padding"
+            class="card-padding"
+          >
             <vue-flashcard
               v-if="todaysDeck.cards.length > 1"
               id="next-card"
               :class="switchCardSequence ? 'switch-crd-seq-next-crd' : 'next-card'"
               :front="nextCard.front_rich_text"
               :back="' '"
-            ></vue-flashcard>
+            />
           </div>
-          <div id="third-card-padding" class="card-padding">
+          <div
+            id="third-card-padding"
+            class="card-padding"
+          >
             <vue-flashcard
               v-if="todaysDeck.cards.length > 2"
               id="third-card"
@@ -59,9 +75,12 @@
               class="card"
               front="   /n hahaha! you'll never see me /n   "
               back="   /n /n /n   "
-            ></vue-flashcard>
+            />
           </div>
-          <div id="fourth-card-padding" class="card-padding">
+          <div
+            id="fourth-card-padding"
+            class="card-padding"
+          >
             <vue-flashcard
               v-if="todaysDeck.cards.length > 2"
               id="fourth-card"
@@ -69,11 +88,19 @@
               class="card"
               front="   /n hahaha! you'll never see me /n   "
               back="   /n /n /n   "
-            ></vue-flashcard>
+            />
           </div>
         </b-col>
-        <b-col v-else id="spinner-col">
-          <font-awesome-icon id="spinner" icon="spinner" spin size="5x" />
+        <b-col
+          v-else
+          id="spinner-col"
+        >
+          <font-awesome-icon
+            id="spinner"
+            icon="spinner"
+            spin
+            size="5x"
+          />
         </b-col>
       </b-row>
       <b-row id="bot-buttons-row">
@@ -84,7 +111,11 @@
             class="btn-circle"
             @click="incorrect()"
           >
-            <font-awesome-icon class="btn-icon" size="2x" icon="times" />
+            <font-awesome-icon
+              class="btn-icon"
+              size="2x"
+              icon="times"
+            />
           </b-button>
         </b-col>
         <b-col class="buttons-col">
@@ -96,7 +127,11 @@
             @keydown.down="flipCard()"
             @click="flipCard()"
           >
-            <font-awesome-icon class="btn-icon" size="2x" icon="sync" />
+            <font-awesome-icon
+              class="btn-icon"
+              size="2x"
+              icon="sync"
+            />
           </b-button>
         </b-col>
         <b-col class="buttons-col">
@@ -106,14 +141,23 @@
             class="btn-circle"
             @click="correct()"
           >
-            <font-awesome-icon class="btn-icon" size="2x" icon="check" />
+            <font-awesome-icon
+              class="btn-icon"
+              size="2x"
+              icon="check"
+            />
           </b-button>
-          <b-button @click="resetColleciton()">reset colleciton</b-button>
+          <b-button @click="resetColleciton()">
+            reset colleciton
+          </b-button>
         </b-col>
       </b-row>
     </b-container>
-    <b-container v-else style="text-align: center;">
-      <br />
+    <b-container
+      v-else
+      style="text-align: center;"
+    >
+      <br>
       <h1>Good work!</h1>
       <p>You've finished all your cards for today.</p>
     </b-container>
@@ -121,15 +165,15 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
-import defaultCollection from '../assets/defaultCollection.json';
-const vueFlashcard = () => import('../components/flashcard');
+import { mapGetters, mapState } from 'vuex'
+// import defaultCollection from '../assets/defaultCollection.json'
+const vueFlashcard = () => import('../components/flashcard')
 
 export default {
   name: 'Home',
   components: { vueFlashcard },
   props: { alertBrowserRec: { type: Boolean } },
-  data() {
+  data () {
     return {
       // currentCardIndex: 0,
       cardFlipToggle: false,
@@ -140,14 +184,14 @@ export default {
       reDrawCardKey: 0,
       correctAnswer: false,
       maxCardsUnset: false,
-      alertOffline: false,
-    };
+      alertOffline: false
+    }
   },
   computed: {
     ...mapGetters({
       reviewDeck: 'reviewDeck',
       todaysDeckFull: 'todaysDeck',
-      isAuthenticated: 'isAuthenticated',
+      isAuthenticated: 'isAuthenticated'
     }),
     ...mapState([
       'user_collection',
@@ -157,113 +201,120 @@ export default {
       'syncing',
       'syncFailed',
       'initialSync',
-      'online',
+      'online'
     ]),
-    spinner() {
+    spinner () {
       if (this.syncing && this.initialSync === 1) {
-        return true;
+        return true
       } else {
-        return false;
+        return false
       }
     },
-    todaysDeck() {
-      const cards = [];
+    todaysDeck () {
+      const cards = []
       for (const card of this.todaysDeckFull.cards) {
         if (this.todaysDeckCardIds.includes(card.card_id)) {
-          cards.push(card);
+          cards.push(card)
         }
       }
-      return { cards: cards };
+      return { cards: cards }
     },
-    currentCard() {
-      return this.todaysDeck.cards[0];
+    currentCard () {
+      return this.todaysDeck.cards[0]
     },
-    nextCard() {
+    nextCard () {
       if (this.todaysDeck.cards.length > 1) {
-        return this.todaysDeck.cards[this.todaysDeck.cards.indexOf(this.currentCard) + 1];
+        return this.todaysDeck.cards[this.todaysDeck.cards.indexOf(this.currentCard) + 1]
       } else {
         return {
           front_rich_text: '    /n /n /n    ',
-          back_rich_text: '    /n /n /n    ',
-        };
+          back_rich_text: '    /n /n /n    '
+        }
       }
-    },
+    }
   },
   watch: {
-    syncing: function() {
-      this.$store.commit('updateInitialSync', this.initialSync + 1);
+    syncing: function () {
+      this.$store.commit('updateInitialSync', this.initialSync + 1)
       if (this.initialSync === 2 && this.maxCardsUnset) {
-        this.setTodaysMaxCards();
+        this.setTodaysMaxCards()
       }
-    },
-  },
-  created() {},
-  mounted() {
-    if (!this.online && this.initialSync === 0) {
-      this.alertOffline = !this.alertOffline;
     }
-    this.$store.dispatch('checkJwt');
-    this.$store.commit('updateCurrentDeckId', 'reviewDeck');
+  },
+  created () {},
+  mounted () {
+    /*
+    if (!this.online && this.initialSync === 0) {
+      this.alertOffline = !this.alertOffline
+    }
+    this.$store.dispatch('checkJwt')
+    this.$store.commit('updateCurrentDeckId', 'reviewDeck')
     // Determine status of user. New or returning:
-    let localStorageEmpty = false;
-    let returningNewUser = false;
+    let localStorageEmpty = false
+    let returningNewUser = false
     if ((this.user_collection === null) | (this.decks === null)) {
-      localStorageEmpty = true;
+      localStorageEmpty = true
     } else if (this.user_collection.user_id === 'tutorial') {
-      returningNewUser = true;
+      returningNewUser = true
     }
     // returning user, expired jwt
     if (!this.isAuthenticated && this.jwt !== null && !returningNewUser) {
       // console.log('returning user, expired jwt')
-      this.$router.push('login');
+      this.$router.push('login')
     }
     // returning user, valid jwt, no cache
     else if (this.isAuthenticated && localStorageEmpty) {
       // console.log('returning user, valid jwt, no cache')
-      this.$store.commit('updateUserCollection', defaultCollection.user_collection);
-      this.$store.commit('updateDecks', defaultCollection.decks);
-      this.$store.dispatch('cloudSync', true);
-      this.$store.commit('toggleSyncing', true);
+      this.$store.commit('updateUserCollection', defaultCollection.user_collection)
+      this.$store.commit('updateDecks', defaultCollection.decks)
+      this.$store.dispatch('cloudSync', true)
+      this.$store.commit('toggleSyncing', true)
     }
     // returning user, valid jwt, has cache
     else if (this.isAuthenticated && !localStorageEmpty && this.initialSync === 0) {
       // console.log('returning user, valid jwt, has cache')
       // could be coming back from other parts of the app, so need to suppress sync if not initial
-      this.$store.dispatch('cloudSync', true);
-      this.$store.commit('toggleSyncing', true);
+      this.$store.dispatch('cloudSync', true)
+      this.$store.commit('toggleSyncing', true)
     }
     // new user or no JWT
     else if ((!this.isAuthenticated && this.jwt === null) || returningNewUser) {
       // console.log('new user or no JWT')
-      this.$store.commit('updateUserCollection', defaultCollection.user_collection);
-      this.$store.commit('updateDecks', defaultCollection.decks);
+      this.$store.commit('updateUserCollection', defaultCollection.user_collection)
+      this.$store.commit('updateDecks', defaultCollection.decks)
       // each path through mounted (except to login) needs to end with initialSync at 2,
       // to allow sync calls elsewhere (decks and collection watcher, and the online warning component) and supress them at the start
-      this.$store.commit('updateInitialSync', 2);
+      this.$store.commit('updateInitialSync', 2)
     }
     if (this.lastSyncsData === null) {
-      this.$store.dispatch('refreshLastSyncsData');
+      this.$store.dispatch('refreshLastSyncsData')
     }
     // this.currentCardIndex = 0 // this was before using store. Return to it for speed?
 
     // set todaysDeck to maximum length as per settings, but if syncing, do after sync. Hence the watcher
-    this.setTodaysMaxCards();
+    this.setTodaysMaxCards()
     if (this.syncing) {
-      this.maxCardsUnset = true;
+      this.maxCardsUnset = true
     }
     this.$store.dispatch('navProgress', {
       totalCards: this.todaysDeckCardIds.length,
-      completed: 0,
-    });
-    this.setKeys();
+      completed: 0
+    })
+    this.setKeys()
 
-    this.$emit('homeLoad');
+    */
+    this.$log.debug('Mounting....')
+    // const updateData = { totalCards: 0, completed: 0 }
+    // this.$store.dispatch('navProgress', updateData)
+
+    this.$emit('homeLoad')
+    console.log('Mounted Complete')
   },
-  destroyed() {
-    window.removeEventListener('keydown', this.onKeyPress);
+  destroyed () {
+    window.removeEventListener('keydown', this.onKeyPress)
   },
   methods: {
-    resetCollection() {
+    resetCollection () {
       const userCollection = {
         schedule: {
           edited: 1583750774333,
@@ -272,76 +323,76 @@ export default {
               card_id: '6185906d-9c89-40d9-b301-0b1a76ffdb19',
               due: 2961665555762.326,
               last_interval: 1449551462400,
-              level: 28,
+              level: 28
             },
             {
               card_id: '5de6a885-81e2-410c-9a08-4f5fb62fed20',
               due: 16,
               last_interval: 86400,
-              level: 0,
+              level: 0
             },
             {
               card_id: 'e1e6d8e1-d836-4640-86c3-e0b83abc2ed8',
               due: 2728384648703.6675,
               last_interval: 1449551462400,
-              level: 28,
+              level: 28
             },
             {
               card_id: '0da68541-2545-4d4b-b9af-4e5d3149547f',
               due: 3031617296158.598,
               last_interval: 1449551462400,
-              level: 28,
+              level: 28
             },
             {
               card_id: 'c09cb5fc-f42d-4e73-bfb1-e8dd67d28ebc',
               due: 2967200366816.0996,
               last_interval: 1449551462400,
-              level: 28,
+              level: 28
             },
             {
               card_id: 'c931f561-a6fd-46c0-ae1e-72c2d505e948',
               due: 1583167886256,
               last_interval: null,
-              level: 0,
+              level: 0
             },
             {
               card_id: 'be10c254-83b5-447f-b238-61a47f01ed41',
               due: 1583221303302.0015,
               last_interval: 22118400,
-              level: 13,
+              level: 13
             },
             {
               card_id: 'a2cdfc17-5928-4cb1-90f6-2daf1b9bdf39',
               due: 1583265467815.036,
               last_interval: 44236800,
-              level: 14,
+              level: 14
             },
             {
               card_id: 'f0ec0e06-c168-480f-83f6-e45422ef3ce6',
               due: 1583222208200.5833,
               last_interval: 22118400,
-              level: 13,
+              level: 13
             },
             {
               card_id: 'b88d3368-6d10-4fcf-a1ad-04b20cfef466',
               due: 1583218852330,
               last_interval: null,
-              level: 0,
+              level: 0
             },
             {
               card_id: '4cf74c3a-a3b4-42d0-b5e9-4c0cb585291d',
               level: 0,
               due: 1583750774246,
-              last_interval: null,
-            },
-          ],
+              last_interval: null
+            }
+          ]
         },
         deck_ids: [
           'ea2c0b5b-18e0-4885-bd1b-dcae462a0a49',
           '4c8bc0ec6d8145e8a40e3e65d265c357',
           'a148c3181fb342eaa0f7a6480c158042',
           '830ea7b8d1ff4683a4e0d074ce0f7f7a',
-          '2f9d2b4a-a7be-4589-807e-0c47e3b1a336',
+          '2f9d2b4a-a7be-4589-807e-0c47e3b1a336'
         ],
         deleted_deck_ids: [
           '558d57aa-434b-4e9e-a5aa-d52b4fa33f72',
@@ -365,7 +416,7 @@ export default {
           '20ead6d8-cee5-4b93-aa44-6fb71b3507e1',
           '877ad2b8-3718-4878-99fc-d8c8c31cb523',
           '2e14efcc-0089-4a54-9efe-48f030d04355',
-          '002637ce-a867-4ae1-b63d-dee3bee489c0',
+          '002637ce-a867-4ae1-b63d-dee3bee489c0'
         ],
         webapp_settings: {
           text_editor: {
@@ -376,137 +427,137 @@ export default {
                 'underline',
                 'code-block',
                 {
-                  size: ['small', false, 'large', 'huge'],
+                  size: ['small', false, 'large', 'huge']
                 },
                 {
-                  color: [],
+                  color: []
                 },
                 {
-                  background: [],
+                  background: []
                 },
                 {
-                  align: [],
+                  align: []
                 },
-                'image',
-              ],
-            },
+                'image'
+              ]
+            }
           },
           schedule: {
             initial_reviews: [1, 5, 20, 60],
             later_reviews_multiplier: 2,
             fail_mode: 'reset',
             randomizer: 0.1,
-            max_cards: 50,
+            max_cards: 50
           },
-          edited: 1583766340779,
+          edited: 1583766340779
         },
         all_deck_cids: [],
-        user_id: '642a264a-00a2-4517-9d95-64a29174c4bd',
-      };
-      this.$store.commit('updateUserCollection', userCollection);
+        user_id: '642a264a-00a2-4517-9d95-64a29174c4bd'
+      }
+      this.$store.commit('updateUserCollection', userCollection)
     },
-    swipeHandler(direction) {
+    swipeHandler (direction) {
       if (direction === 'left') {
-        this.incorrect();
+        this.incorrect()
       } else if (direction === 'right') {
-        this.correct();
+        this.correct()
       }
     },
-    flipCard() {
-      this.cardFlipToggle = !this.cardFlipToggle;
+    flipCard () {
+      this.cardFlipToggle = !this.cardFlipToggle
     },
-    incorrect(flag) {
-      this.correctAnswer = false;
-      this.switchCardSequence = true;
+    incorrect (flag) {
+      this.correctAnswer = false
+      this.switchCardSequence = true
       if (!flag) {
         setTimeout(() => {
-          this.$store.dispatch('levelDownCard', this.currentCard.card_id);
-          this.NavbarProgess();
-          this.incorrect(true);
-        }, 305);
-        return;
+          this.$store.dispatch('levelDownCard', this.currentCard.card_id)
+          this.NavbarProgess()
+          this.incorrect(true)
+        }, 305)
+        return
       }
-      this.cardFlipToggle = false;
-      this.reDrawCardKey++;
+      this.cardFlipToggle = false
+      this.reDrawCardKey++
       // this.currentCardIndex ++
-      this.switchCardSequence = false;
+      this.switchCardSequence = false
     },
-    correct(flag) {
-      this.correctAnswer = true;
-      this.switchCardSequence = true;
+    correct (flag) {
+      this.correctAnswer = true
+      this.switchCardSequence = true
       if (!flag) {
         setTimeout(() => {
-          this.$store.dispatch('levelUpCard', this.currentCard.card_id);
-          this.NavbarProgess();
-          this.correct(true);
-        }, 305);
-        return;
+          this.$store.dispatch('levelUpCard', this.currentCard.card_id)
+          this.NavbarProgess()
+          this.correct(true)
+        }, 305)
+        return
       }
-      this.cardFlipToggle = false;
-      this.reDrawCardKey++;
+      this.cardFlipToggle = false
+      this.reDrawCardKey++
       // this.currentCardIndex ++
-      this.switchCardSequence = false;
+      this.switchCardSequence = false
     },
-    NavbarProgess() {
-      const totalCards = this.todaysDeckCardIds.length;
-      const completed = this.todaysDeckCardIds.length - this.todaysDeck.cards.length;
-      const updateData = { totalCards: totalCards, completed: completed };
-      this.$store.dispatch('navProgress', updateData);
+    NavbarProgess () {
+      const totalCards = this.todaysDeckCardIds.length
+      const completed = this.todaysDeckCardIds.length - this.todaysDeck.cards.length
+      const updateData = { totalCards: totalCards, completed: completed }
+      this.$store.dispatch('navProgress', updateData)
     },
-    editCard(card, reviewDeck) {
-      this.$store.commit('updateCardToEditIndex', reviewDeck.cards.indexOf(card));
-      this.$router.push('/card-editor');
+    editCard (card, reviewDeck) {
+      this.$store.commit('updateCardToEditIndex', reviewDeck.cards.indexOf(card))
+      this.$router.push('/card-editor')
     },
-    setTodaysMaxCards() {
+    setTodaysMaxCards () {
       for (const card of this.todaysDeckFull.cards) {
-        const maxReviewLength = this.user_collection.webapp_settings.schedule.max_cards;
+        const maxReviewLength = this.user_collection.webapp_settings.schedule.max_cards
         if (this.todaysDeckFull.cards.length >= maxReviewLength) {
-          break;
+          break
         } else {
           if (!this.todaysDeckCardIds.includes(card)) {
-            this.todaysDeckCardIds.push(card.card_id);
+            this.todaysDeckCardIds.push(card.card_id)
           }
         }
       }
     },
-    PWAUpdate(bool) {
-      this.$emit('updatePWA', bool);
+    PWAUpdate (bool) {
+      this.$emit('updatePWA', bool)
     },
-    onKeyPress(event) {
+    onKeyPress (event) {
       if (event.keyCode === 13 || event.keyCode === 40 || event.keyCode === 32) {
-        event.preventDefault();
+        event.preventDefault()
         // enter, down, and spacebar
-        this.flipCard();
+        this.flipCard()
       }
       if (event.keyCode === 39) {
-        event.preventDefault();
+        event.preventDefault()
         // right
-        this.correct();
+        this.correct()
       }
       if (event.keyCode === 37) {
-        event.preventDefault();
+        event.preventDefault()
         // left
-        this.incorrect();
+        this.incorrect()
       }
       if (event.keyCode === 38) {
         // up
-        event.preventDefault();
-        this.editCard(this.currentCard, this.reviewDeck);
-        this.$emit('edit-clicked');
+        event.preventDefault()
+        this.editCard(this.currentCard, this.reviewDeck)
+        this.$emit('edit-clicked')
       }
       if (event.keyCode === 78) {
         // n
-        event.preventDefault();
-        this.$emit('new-card');
+        event.preventDefault()
+        this.$emit('new-card')
       }
     },
-    setKeys() {
+    setKeys () {
       this.$nextTick(() => {
-        window.addEventListener('keydown', this.onKeyPress, false);
-      });
-    },
-  },
-};
+        window.addEventListener('keydown', this.onKeyPress, false)
+      })
+    }
+  }
+}
 </script>
 
 <style scoped>

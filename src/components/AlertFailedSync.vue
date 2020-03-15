@@ -14,36 +14,36 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { BAlert } from 'bootstrap-vue';
+import { mapState } from 'vuex'
+import { BAlert } from 'bootstrap-vue'
 export default {
   components: {
-    BAlert,
+    BAlert
   },
   data: () => ({
     dismissSecs: 8,
     dismissCountDown: 0,
-    syncFailedWarningTxt: `Cloud sync failed`,
+    syncFailedWarningTxt: 'Cloud sync failed'
   }),
   computed: {
-    ...mapState(['syncFailed']),
+    ...mapState(['syncFailed'])
   },
   watch: {
-    syncFailed() {
+    syncFailed () {
       if (!this.syncFailed) {
-        this.showAlert();
+        this.showAlert()
       }
-    },
+    }
   },
   methods: {
-    countDownChanged(dismissCountDown) {
-      this.dismissCountDown = dismissCountDown;
+    countDownChanged (dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
     },
-    showAlert() {
-      this.dismissCountDown = this.dismissSecs;
-    },
-  },
-};
+    showAlert () {
+      this.dismissCountDown = this.dismissSecs
+    }
+  }
+}
 </script>
 
 <style scoped>

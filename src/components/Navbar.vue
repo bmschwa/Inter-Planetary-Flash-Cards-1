@@ -1,19 +1,52 @@
 <template>
   <div id="body">
-    <b-navbar ref="navbarMain" toggleable="xs" type="dark" variant="primary">
+    <b-navbar
+      ref="navbarMain"
+      toggleable="xs"
+      type="dark"
+      variant="primary"
+    >
       <b-navbar-toggle target="nav-collapse" />
-      <b-link to="#" class="icon">
-        <font-awesome-icon style="color: white;" class="fa-lg" icon="search" />
+      <b-link
+        to="#"
+        class="icon"
+      >
+        <font-awesome-icon
+          style="color: white;"
+          class="fa-lg"
+          icon="search"
+        />
       </b-link>
-      <b-nav-text id="session-counter" style="color: white;">
+      <b-nav-text
+        id="session-counter"
+        style="color: white;"
+      >
         {{ navProgressCounter }}
       </b-nav-text>
-      <b-link class="icon" @click="$emit('new-card')">
-        <img src="/img/icons/add card logo.svg" alt="add" />
+      <b-link
+        class="icon"
+        @click="$emit('new-card')"
+      >
+        <img
+          src="/img/icons/add card logo.svg"
+          alt="add"
+        >
       </b-link>
-      <b-link id="sync-link" aria-label="sync status" @click="callSync()">
-        <font-awesome-layers id="sync-layers" class="fa-lg">
-          <font-awesome-icon id="cloud" style="color: white;" class="fa-lg" icon="cloud" />
+      <b-link
+        id="sync-link"
+        aria-label="sync status"
+        @click="callSync()"
+      >
+        <font-awesome-layers
+          id="sync-layers"
+          class="fa-lg"
+        >
+          <font-awesome-icon
+            id="cloud"
+            style="color: white;"
+            class="fa-lg"
+            icon="cloud"
+          />
           <font-awesome-icon
             v-if="syncing"
             id="sync-spinner"
@@ -38,29 +71,78 @@
           />
         </font-awesome-layers>
       </b-link>
-      <b-collapse id="nav-collapse" is-nav>
+      <b-link
+        class="icon"
+        to="profile"
+      >
+        <!-- Profile -->
+        <font-awesome-icon
+          v-if="this.$store.getters.isAuthenticated"
+          style="color: white;"
+          class="fa-lg"
+          icon="user"
+        />
+        <font-awesome-icon
+          v-else
+          style="color: white;"
+          class="fa-lg"
+          icon=""
+        />
+      </b-link>
+      <b-collapse
+        id="nav-collapse"
+        is-nav
+      >
         <b-navbar-nav>
-          <b-nav-item class="dropdown-item" to="/home">
+          <b-nav-item
+            class="dropdown-item"
+            to="/home"
+          >
             Review
           </b-nav-item>
-          <b-nav-item class="dropdown-item" to="/Settings">
+          <b-nav-item
+            class="dropdown-item"
+            to="/Settings"
+          >
             Settings
           </b-nav-item>
-          <b-nav-item class="dropdown-item" to="/deck-selection">
+          <b-nav-item
+            class="dropdown-item"
+            to="/deck-selection"
+          >
             Decks
           </b-nav-item>
-          <b-nav-item v-if="!installed" class="dropdown-item" @click="installer()">
+          <b-nav-item
+            v-if="!installed"
+            class="dropdown-item"
+            @click="installer()"
+          >
             Install App
           </b-nav-item>
-          <b-nav-item class="dropdown-item" to="#" disabled>
+          <b-nav-item
+            class="dropdown-item"
+            to="#"
+            disabled
+          >
             Lessons
           </b-nav-item>
-          <b-nav-item class="dropdown-item" to="#" disabled>
+          <b-nav-item
+            class="dropdown-item"
+            to="#"
+            disabled
+          >
             Classes
           </b-nav-item>
           <b-nav-form>
-            <b-form-input size="sm" class="mr-sm-1" placeholder="find decks and classes" />
-            <b-button size="sm" type="submit">
+            <b-form-input
+              size="sm"
+              class="mr-sm-1"
+              placeholder="find decks and classes"
+            />
+            <b-button
+              size="sm"
+              type="submit"
+            >
               Search
             </b-button>
           </b-nav-form>
@@ -80,9 +162,9 @@ import {
   BNavbarToggle,
   BNavText,
   BNavItem,
-  BCollapse,
-} from 'bootstrap-vue';
-import { mapState } from 'vuex';
+  BCollapse
+} from 'bootstrap-vue'
+import { mapState } from 'vuex'
 export default {
   name: 'Navbar',
   components: {
@@ -94,58 +176,60 @@ export default {
     BNavbarToggle,
     BNavText,
     BNavItem,
-    BCollapse,
+    BCollapse
   },
   props: { chromeInstallPrompt: { type: Boolean } },
-  data() {
+  data () {
     return {
       installed: true,
       installer: undefined,
-      installPrompt: null,
-    };
+      installPrompt: null
+    }
   },
   computed: {
-    navProgressCounter() {
-      return this.$store.getters.navProgressCounter;
+    navProgressCounter () {
+      return this.$store.getters.navProgressCounter
     },
-    ...mapState(['syncing', 'syncFailed', 'online']),
+    ...mapState(['syncing', 'syncFailed', 'online'])
   },
   watch: {
-    chromeInstallPrompt() {
+    chromeInstallPrompt () {
       if (this.installPrompt !== null) {
-        this.installer();
+        this.installer()
       }
-    },
+    }
   },
-  created() {
+  created () {
+    this.$log.debug('navBarCreated')
     window.addEventListener('beforeinstallprompt', e => {
-      e.preventDefault();
-      this.installPrompt = e;
-      this.installed = false;
-    });
+      e.preventDefault()
+      this.installPrompt = e
+      this.installed = false
+    })
     this.installer = () => {
-      this.installed = true;
-      this.installPrompt.prompt();
+      this.installed = true
+      this.installPrompt.prompt()
       this.installPrompt.userChoice.then(result => {
         if (result.outcome === 'accepted') {
           // console.log("user accepted")
         } else {
           // console.log("user denied")
         }
-        this.installPrompt = null;
-      });
-    };
+        this.installPrompt = null
+      })
+    }
   },
   methods: {
-    callSync() {
+    callSync () {
+      this.$log.debug('navBarSync')
       if (this.$store.getters.isAuthenticated) {
-        this.$store.dispatch('cloudSync', true);
+        this.$store.dispatch('cloudSync', true)
       } else {
-        this.$router.push('/login');
+        this.$router.push('/login')
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped>
